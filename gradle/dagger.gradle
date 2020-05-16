@@ -1,0 +1,15 @@
+import com.karzek.buildsrc.Libs
+
+dependencies {
+    if (properties.containsKey('android.injected.invoked.from.ide')) {
+        debugImplementation Libs.Dagger.JW.reflect
+    } else {
+        kaptDebug Libs.Dagger.compiler
+        debugImplementation Libs.Dagger.JW.codegen
+    }
+    kaptRelease Libs.Dagger.compiler
+    releaseImplementation Libs.Dagger.JW.codegen
+    implementation Libs.Dagger.dagger
+    implementation Libs.Dagger.androidSupport
+    kapt Libs.Dagger.androidProcessor
+}
