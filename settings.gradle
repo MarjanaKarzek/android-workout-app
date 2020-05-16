@@ -1,3 +1,4 @@
 rootProject.name='Workout App'
 include ':app'
 include ':buildSrc'
+include ':core'
