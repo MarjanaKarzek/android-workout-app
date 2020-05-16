@@ -4,4 +4,13 @@ apply from: "$rootDir/gradle/android-library.gradle"
 
 dependencies {
   implementation project(':core')
+
+  implementation Libs.AndroidX.recyclerView
+
+  implementation Libs.ReactiveX.Java.rxJava2Android
+  implementation Libs.ReactiveX.Kotlin.rxKotlin
+
+  implementation Libs.AutoDispose.autoDispose
+  implementation Libs.AutoDispose.android
+
 }
