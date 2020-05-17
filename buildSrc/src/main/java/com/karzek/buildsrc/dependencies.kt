@@ -21,7 +21,7 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-        const val constraintLayout =  "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
     }
 
     object Google {
@@ -82,8 +82,7 @@ object Libs {
 
         object Binding {
             private const val version = "3.1.0"
-            const val binding =  "com.jakewharton.rxbinding3:rxbinding:$version"
-            const val material = "com.jakewharton.rxbinding3:rxbinding-material:$version"
+            const val binding = "com.jakewharton.rxbinding3:rxbinding:$version"
         }
     }
 

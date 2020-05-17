@@ -14,7 +14,7 @@ class MainActivity : BaseActivity() {
         showExerciseList()
     }
 
-    private fun showExerciseList(){
+    private fun showExerciseList() {
         replaceFragment(ExercisesFragment())
     }
 }

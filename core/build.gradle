@@ -4,5 +4,6 @@ apply from: "$rootDir/gradle/android-library.gradle"
 
 dependencies {
   implementation Libs.ReactiveX.Java.rxJava2Android
+  implementation Libs.ReactiveX.Binding.binding
   implementation Libs.Google.material
 }
