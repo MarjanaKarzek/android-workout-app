@@ -22,6 +22,9 @@ dependencies {
   implementation Libs.Retrofit.retrofitRxAdapter
   implementation Libs.Gson.gson
 
+  implementation Libs.Glide.glide
+  kapt Libs.Glide.compiler
+
   testImplementation Libs.Test.JUnit.jupiterApi
   testImplementation Libs.Test.Mockk.mockk
 }

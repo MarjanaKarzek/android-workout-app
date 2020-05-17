@@ -13,4 +13,7 @@ dependencies {
   implementation Libs.OkHttp.okHttp
   debugImplementation Libs.Chucker.debug
   releaseImplementation Libs.Chucker.release
+
+  implementation Libs.Glide.glide
+  kapt Libs.Glide.compiler
 }

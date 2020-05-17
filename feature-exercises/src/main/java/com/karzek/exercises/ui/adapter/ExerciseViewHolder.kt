@@ -3,9 +3,12 @@ package com.karzek.exercises.ui.adapter
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.recyclerview.widget.RecyclerView
+import com.karzek.core.ui.images.GlideApp
+import com.karzek.exercises.R
 import com.karzek.exercises.domain.model.Exercise
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseCategory
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseEquipment
+import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseImage
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseMuscles
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseName
 
@@ -31,9 +34,16 @@ class ExerciseViewHolder(
         exerciseName.text = originalItem.name
         exerciseCategory.text = originalItem.category
 
-        //TODO load image from url
+        loadThumbnail()
         setupEquipmentSection()
         setupMuscleSection()
+    }
+
+    private fun loadThumbnail() = with(containerView) {
+        GlideApp.with(this)
+            .load(originalItem.imageThumbnailUrl)
+            .placeholder(R.drawable.ic_exercise_placeholder)
+            .into(exerciseImage)
     }
 
     private fun setupEquipmentSection() = with(containerView) {
