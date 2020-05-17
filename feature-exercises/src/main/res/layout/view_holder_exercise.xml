@@ -1,17 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     >
 
-  <TextView
-      android:id="@+id/exerciseName"
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="16dp"
-      android:textSize="20sp"
-      tools:text="Some Exercise name"
-      />
+      >
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/exerciseImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_exercise_placeholder"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:background="@drawable/bg_gradient_white_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/exerciseImage"
+        >
+
+      <TextView
+          android:id="@+id/exerciseName"
+          style="@style/TextStyle.Title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          tools:text="Exercise Name"
+          />
+
+      <TextView
+          android:id="@+id/exerciseCategory"
+          style="@style/TextStyle.Subtitle"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginTop="4dp"
+          tools:text="Exercise Category"
+          />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/exerciseEquipment"
+        style="@style/TextStyle.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:drawableStart="@drawable/ic_equipment"
+        android:drawablePadding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/exerciseMuscles"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_goneMarginBottom="8dp"
+        tools:text="Barbell, Incline bench"
+        tools:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/exerciseMuscles"
+        style="@style/TextStyle.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:drawableStart="@drawable/ic_muscle"
+        android:drawablePadding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exerciseEquipment"
+        app:layout_goneMarginTop="16dp"
+        tools:text="Anterior deltoid"
+        tools:visibility="visible"
+        />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

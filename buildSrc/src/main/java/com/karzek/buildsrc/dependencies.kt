@@ -21,6 +21,11 @@ object Libs {
         const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+        const val constraintLayout =  "androidx.constraintlayout:constraintlayout:2.0.0-alpha1"
+    }
+
+    object Google {
+        const val material = "com.google.android.material:material:1.2.0-alpha06"
     }
 
     object AutoDispose {
