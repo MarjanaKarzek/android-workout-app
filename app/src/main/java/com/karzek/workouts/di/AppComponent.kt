@@ -1,6 +1,7 @@
 package com.karzek.workouts.di
 
 import com.karzek.core.di.CoreModule
+import com.karzek.exercises.di.ExercisesModule
 import com.karzek.workouts.WorkoutApplication
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -14,7 +15,8 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         CoreModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        ExercisesModule::class
     ]
 )
 interface AppComponent : AndroidInjector<WorkoutApplication> {

@@ -2,13 +2,15 @@ package com.karzek.exercises.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.model.Exercise
 
 class ExercisesAdapter(
     private val interactionListener: ExerciseInteractionListener
-) : ListAdapter<Exercise, ExerciseViewHolder>(ExerciseDiffUtil()) {
+) : RecyclerView.Adapter<ExerciseViewHolder>() {
+
+    private val data = ArrayList<Exercise>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -21,10 +23,14 @@ class ExercisesAdapter(
     override fun onBindViewHolder(
         holder: ExerciseViewHolder,
         position: Int
-    ) = holder.bind(getItem(position))
+    ) = holder.bind(data[position])
 
-    fun swapData(data: List<Exercise>) {
-        submitList(data.toMutableList())
+    fun addData(data: List<Exercise>) {
+        val originalItemCount = this.data.size
+        this.data.addAll(data)
+        notifyItemRangeInserted(originalItemCount, data.size)
     }
+
+    override fun getItemCount() = data.size
 
 }

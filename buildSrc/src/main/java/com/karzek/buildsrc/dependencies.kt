@@ -83,6 +83,7 @@ object Libs {
         object Binding {
             private const val version = "3.1.0"
             const val binding = "com.jakewharton.rxbinding3:rxbinding:$version"
+            const val recyclerView = "com.jakewharton.rxbinding3:rxbinding-recyclerview:$version"
         }
     }
 
@@ -96,6 +97,11 @@ object Libs {
     object Timber {
         private const val version = "4.7.1"
         const val timber = "com.jakewharton.timber:timber:${version}"
+    }
+
+    object Animator {
+        private const val version = "3.0.0"
+        const val recyclerViewAnimators = "jp.wasabeef:recyclerview-animators:${version}"
     }
 
     object Test {

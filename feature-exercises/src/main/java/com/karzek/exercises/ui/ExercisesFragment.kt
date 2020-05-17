@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jakewharton.rxbinding3.recyclerview.RecyclerViewScrollEvent
+import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.karzek.core.ui.BaseFragment
 import com.karzek.core.ui.binding.itemClicks
 import com.karzek.exercises.R
@@ -13,6 +15,7 @@ import com.karzek.exercises.ui.adapter.ExerciseInteractionListener
 import com.karzek.exercises.ui.adapter.ExercisesAdapter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.autoDispose
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_exercises.recyclerView
 import kotlinx.android.synthetic.main.fragment_exercises.toolbar
 
@@ -20,6 +23,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
 
     private val viewModel: ExercisesViewModel by bindViewModel()
     private lateinit var adapter: ExercisesAdapter
+    private lateinit var layoutManager: LinearLayoutManager
 
     override fun getTagForStack() = ExercisesFragment::class.java.toString()
 
@@ -32,26 +36,37 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         setupRecyclerView()
         setupToolbar()
         subscribeToViewModel()
-        viewModel.getExercises()
+        viewModel.getInitialExercises()
     }
 
     private fun setupRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
         adapter = ExercisesAdapter(this)
+        recyclerView.itemAnimator = SlideInUpAnimator()
         recyclerView.adapter = adapter
+        recyclerView.scrollEvents()
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe {
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                viewModel.onScroll(visibleItemCount, totalItemCount, firstVisibleItemPosition)
+            }
+
     }
 
     private fun subscribeToViewModel() {
         viewModel.exercises
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe { exercises ->
-                adapter.swapData(exercises)
+                adapter.addData(exercises)
             }
     }
 
     override fun onExerciseClicked(exercise: Exercise) {
         //TODO show exercise details
-        Toast.makeText(context, "On exercise \"${exercise.name} clicked", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "On exercise \"${exercise.name}\" clicked", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupToolbar() {

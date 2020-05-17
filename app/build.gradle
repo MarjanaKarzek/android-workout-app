@@ -57,4 +57,8 @@ dependencies {
   implementation Libs.Google.material
   implementation Libs.Timber.timber
   implementation Libs.ReactiveX.Java.rxJava2Android
+
+  implementation Libs.Retrofit.retrofit
+  implementation Libs.Retrofit.retrofitGson
+  implementation Libs.OkHttp.okHttp
 }

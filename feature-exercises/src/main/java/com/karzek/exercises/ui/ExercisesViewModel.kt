@@ -1,50 +1,70 @@
 package com.karzek.exercises.ui
 
 import com.karzek.core.ui.BaseViewModel
+import com.karzek.core.util.doOnIoObserveOnMain
+import com.karzek.exercises.domain.IGetExercisesUseCase
+import com.karzek.exercises.domain.IGetExercisesUseCase.Input
+import com.karzek.exercises.domain.IGetExercisesUseCase.Output.Success
 import com.karzek.exercises.domain.model.Exercise
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
-class ExercisesViewModel @Inject constructor() : BaseViewModel() {
+class ExercisesViewModel @Inject constructor(
+    private val getExercisesUseCase: IGetExercisesUseCase
+) : BaseViewModel() {
 
-    private val exercisesMock = listOf(
-        Exercise(
-            "Exercise 1",
-            "Category 1"
-        ),
-        Exercise(
-            "Exercise 2",
-            "Category 2",
-            imageUrl = "https://wger.de/media/exercise-images/91/Crunches-2.png.800x800_q90.png"
-        ),
-        Exercise(
-            "Exercise 3",
-            "Category 3",
-            muscles = listOf("Anterior deltoid")
-        ),
-        Exercise(
-            "Exercise 4",
-            "Category 4",
-            equipment = listOf("Barbell", "Incline bench")
-        ),
-        Exercise(
-            "Exercise 5",
-            "Category 5",
-            muscles = listOf("Anterior deltoid"),
-            equipment = listOf("Barbell", "Incline bench")
-        ),
-        Exercise(
-            "Exercise 6",
-            "Category 6",
-            "https://wger.de/media/exercise-images/91/Crunches-2.png.800x800_q90.png",
-            listOf("Anterior deltoid"),
-            listOf("Barbell", "Incline bench")
-        )
-    )
+    private var isLoading = false
+    private var isLastPage = false
+    private var currentPage = 0
 
     val exercises = BehaviorSubject.create<List<Exercise>>()
 
-    fun getExercises() {
-        exercises.onNext(exercisesMock)
+    fun getInitialExercises() {
+        loadMoreItems()
+    }
+
+    fun onScroll(
+        visibleItemCount: Int,
+        totalItemCount: Int,
+        firstVisibleItemPosition: Int
+    ) {
+        if (!isLoading && !isLastPage) {
+            if (areMoreItemsAvailable(visibleItemCount, totalItemCount, firstVisibleItemPosition)) {
+                loadMoreItems()
+            }
+        }
+    }
+
+    private fun loadMoreItems() {
+        isLoading = true
+        getExercisesUseCase.execute(Input(currentPage, PAGE_SIZE))
+            .doOnIoObserveOnMain()
+            .subscribeBy { output ->
+                when (output) {
+                    is Success -> {
+                        currentPage += 1
+                        isLastPage = output.isLastPage
+                        exercises.onNext(output.exercises)
+                    }
+                    else -> {
+                        //TODO error handling
+                    }
+                }
+                isLoading = false
+            }
+            .addTo(compositeDisposable)
+    }
+
+    private fun areMoreItemsAvailable(
+        visibleItemCount: Int,
+        totalItemCount: Int,
+        firstVisibleItemPosition: Int
+    ) = visibleItemCount + firstVisibleItemPosition >= totalItemCount
+        && firstVisibleItemPosition >= 0
+
+    companion object {
+        private const val PAGE_SIZE = 5
     }
 }

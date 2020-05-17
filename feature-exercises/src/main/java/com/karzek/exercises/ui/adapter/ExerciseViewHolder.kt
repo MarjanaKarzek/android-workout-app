@@ -37,20 +37,20 @@ class ExerciseViewHolder(
     }
 
     private fun setupEquipmentSection() = with(containerView) {
-        originalItem.equipment?.run {
-            exerciseEquipment.visibility = View.VISIBLE
-            exerciseEquipment.text = this.joinToString(", ")
-        } ?: run {
+        if (originalItem.equipment.isNullOrEmpty()) {
             exerciseEquipment.visibility = View.GONE
+        } else {
+            exerciseEquipment.visibility = View.VISIBLE
+            exerciseEquipment.text = originalItem.equipment!!.joinToString(", ")
         }
     }
 
     private fun setupMuscleSection() = with(containerView) {
-        originalItem.muscles?.run {
-            exerciseMuscles.visibility = View.VISIBLE
-            exerciseMuscles.text = this.joinToString(", ")
-        } ?: run {
+        if (originalItem.muscles.isNullOrEmpty()) {
             exerciseMuscles.visibility = View.GONE
+        } else {
+            exerciseMuscles.visibility = View.VISIBLE
+            exerciseMuscles.text = originalItem.muscles!!.joinToString(", ")
         }
     }
 }

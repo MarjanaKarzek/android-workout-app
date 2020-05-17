@@ -8,10 +8,17 @@ dependencies {
   implementation Libs.AndroidX.recyclerView
   implementation Libs.AndroidX.constraintLayout
   implementation Libs.Google.material
+  implementation Libs.Animator.recyclerViewAnimators
 
   implementation Libs.ReactiveX.Java.rxJava2Android
   implementation Libs.ReactiveX.Kotlin.rxKotlin
+  implementation Libs.ReactiveX.Binding.recyclerView
 
   implementation Libs.AutoDispose.autoDispose
   implementation Libs.AutoDispose.android
+
+  implementation Libs.Retrofit.retrofit
+  implementation Libs.Retrofit.retrofitGson
+  implementation Libs.Retrofit.retrofitRxAdapter
+  implementation Libs.Gson.gson
 }
