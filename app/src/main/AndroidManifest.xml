@@ -23,6 +23,10 @@
     <activity
         android:name=".ui.main.MainActivity"
         android:theme="@style/AppTheme" />
+
+    <activity
+        android:name="com.karzek.exercises.ui.detail.ExerciseDetailsActivity"
+        android:theme="@style/AppTheme" />
   </application>
 
 </manifest>

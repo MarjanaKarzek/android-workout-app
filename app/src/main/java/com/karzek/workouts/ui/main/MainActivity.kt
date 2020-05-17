@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.karzek.core.ui.BaseActivity
 import com.karzek.core.util.replaceFragment
-import com.karzek.exercises.ui.ExercisesFragment
+import com.karzek.exercises.ui.overview.ExercisesFragment
 import com.karzek.workouts.R.layout
 
 class MainActivity : BaseActivity() {

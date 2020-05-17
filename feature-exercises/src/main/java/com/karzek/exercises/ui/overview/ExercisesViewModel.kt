@@ -1,4 +1,4 @@
-package com.karzek.exercises.ui
+package com.karzek.exercises.ui.overview
 
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.util.doOnIoObserveOnMain

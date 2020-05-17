@@ -1,4 +1,4 @@
-package com.karzek.exercises.ui.adapter
+package com.karzek.exercises.ui.overview.adapter
 
 import android.view.View
 import android.view.View.OnClickListener

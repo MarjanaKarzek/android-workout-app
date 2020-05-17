@@ -1,18 +1,18 @@
-package com.karzek.exercises.ui
+package com.karzek.exercises.ui.overview
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jakewharton.rxbinding3.recyclerview.RecyclerViewScrollEvent
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.karzek.core.ui.BaseFragment
 import com.karzek.core.ui.binding.itemClicks
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.model.Exercise
-import com.karzek.exercises.ui.adapter.ExerciseInteractionListener
-import com.karzek.exercises.ui.adapter.ExercisesAdapter
+import com.karzek.exercises.ui.detail.ExerciseDetailsActivity
+import com.karzek.exercises.ui.overview.adapter.ExerciseInteractionListener
+import com.karzek.exercises.ui.overview.adapter.ExercisesAdapter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.autoDispose
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
@@ -65,8 +65,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     }
 
     override fun onExerciseClicked(exercise: Exercise) {
-        //TODO show exercise details
-        Toast.makeText(context, "On exercise \"${exercise.name}\" clicked", Toast.LENGTH_SHORT).show()
+        startActivity(ExerciseDetailsActivity.newIntent(requireContext(), exercise))
     }
 
     private fun setupToolbar() {
