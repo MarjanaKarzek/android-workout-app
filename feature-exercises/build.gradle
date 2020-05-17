@@ -21,4 +21,7 @@ dependencies {
   implementation Libs.Retrofit.retrofitGson
   implementation Libs.Retrofit.retrofitRxAdapter
   implementation Libs.Gson.gson
+
+  testImplementation Libs.Test.JUnit.jupiterApi
+  testImplementation Libs.Test.Mockk.mockk
 }
