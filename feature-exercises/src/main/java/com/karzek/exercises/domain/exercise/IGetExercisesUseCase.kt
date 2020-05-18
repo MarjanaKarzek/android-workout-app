@@ -1,10 +1,10 @@
-package com.karzek.exercises.domain
+package com.karzek.exercises.domain.exercise
 
 import com.karzek.core.domain.BaseSingleUseCase
 import com.karzek.core.domain.BaseUseCase
-import com.karzek.exercises.domain.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output
+import com.karzek.exercises.domain.exercise.model.Exercise
 
 interface IGetExercisesUseCase : BaseSingleUseCase<Input, Output> {
 

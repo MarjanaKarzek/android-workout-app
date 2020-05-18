@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.karzek.core.ui.BaseActivity
 import com.karzek.exercises.R
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.model.Exercise
 import com.karzek.exercises.ui.detail.adapter.ExerciseImagesAdapter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.autoDispose

@@ -1,6 +1,6 @@
-package com.karzek.exercises.data
+package com.karzek.exercises.data.exercise.contract
 
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.model.Exercise
 import io.reactivex.Single
 
 interface IExerciseRemoteDataSource {

@@ -26,6 +26,10 @@ dependencies {
   implementation Libs.Glide.glide
   kapt Libs.Glide.compiler
 
+  implementation Libs.Room.room
+  implementation Libs.Room.rxJava2
+  kapt Libs.Room.compiler
+
   testImplementation Libs.Test.JUnit.jupiterApi
   testImplementation Libs.Test.Mockk.mockk
 }

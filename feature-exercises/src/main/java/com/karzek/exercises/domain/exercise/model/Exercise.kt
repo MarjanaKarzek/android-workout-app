@@ -1,4 +1,4 @@
-package com.karzek.exercises.domain.model
+package com.karzek.exercises.domain.exercise.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

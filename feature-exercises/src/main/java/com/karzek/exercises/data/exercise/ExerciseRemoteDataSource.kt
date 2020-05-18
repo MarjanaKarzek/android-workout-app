@@ -1,6 +1,7 @@
-package com.karzek.exercises.data
+package com.karzek.exercises.data.exercise
 
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
+import com.karzek.exercises.domain.exercise.model.Exercise
 import com.karzek.exercises.http.category.ICategoryApiService
 import com.karzek.exercises.http.category.model.CategoriesResponse
 import com.karzek.exercises.http.category.model.CategoryResponse

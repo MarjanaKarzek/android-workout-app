@@ -6,7 +6,8 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.karzek.exercises.R
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.category.model.Category
+import com.karzek.exercises.domain.exercise.model.Exercise
 import java.util.Locale
 
 class ExercisesAdapter(
@@ -14,6 +15,7 @@ class ExercisesAdapter(
 ) : RecyclerView.Adapter<ExerciseViewHolder>(), Filterable {
 
     private var lastSearch: CharSequence? = null
+    private var lastSelectedCategory: Category? = null
 
     private val allData = ArrayList<Exercise>()
     private val data = ArrayList<Exercise>()
@@ -57,12 +59,13 @@ class ExercisesAdapter(
     private val exerciseFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             lastSearch = constraint
-            val filteredList = if (constraint.isNullOrBlank()) {
-                allData
-            } else {
-                val filterPattern = constraint.toString().toLowerCase(Locale.ENGLISH).trim()
-                allData.filter { it.name.toLowerCase(Locale.ENGLISH).contains(filterPattern) }
+
+            var filteredList = applySearchFilter(constraint)
+
+            lastSelectedCategory?.run {
+                filteredList = filteredList.filter { it.category == name }
             }
+
             val result = FilterResults()
             result.values = filteredList
             return result
@@ -79,6 +82,20 @@ class ExercisesAdapter(
             }
         }
 
+    }
+
+    private fun applySearchFilter(constraint: CharSequence?): List<Exercise> {
+        return if (constraint.isNullOrBlank()) {
+            allData
+        } else {
+            val filterPattern = constraint.toString().toLowerCase(Locale.ENGLISH).trim()
+            allData.filter { it.name.toLowerCase(Locale.ENGLISH).contains(filterPattern) }
+        }
+    }
+
+    fun setCategoryFilter(category: Category?) {
+        lastSelectedCategory = category
+        filter.filter(lastSearch)
     }
 
 }

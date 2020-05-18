@@ -1,11 +1,13 @@
 package com.karzek.exercises.domain
 
 import com.karzek.exercises.base.BaseUnitTest
-import com.karzek.exercises.domain.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.ErrorUnknown
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.Success
-import com.karzek.exercises.domain.model.Exercise
-import com.karzek.exercises.domain.repository.IExerciseRepository
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.ErrorUnknown
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.Success
+import com.karzek.exercises.domain.exercise.GetExercisesUseCase
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
+import com.karzek.exercises.domain.exercise.model.Exercise
+import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single

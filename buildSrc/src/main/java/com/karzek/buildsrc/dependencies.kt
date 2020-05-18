@@ -101,6 +101,13 @@ object Libs {
         const val retrofitRxAdapter = "com.squareup.retrofit2:adapter-rxjava2:$version"
     }
 
+    object Room {
+        private const val version = "2.2.5"
+        const val room = "androidx.room:room-runtime:${version}"
+        const val compiler = "androidx.room:room-compiler:${version}"
+        const val rxJava2 = "androidx.room:room-rxjava2:${version}"
+    }
+
     object Timber {
         private const val version = "4.7.1"
         const val timber = "com.jakewharton.timber:timber:${version}"

@@ -1,7 +1,8 @@
-package com.karzek.exercises.data
+package com.karzek.exercises.data.exercise
 
-import com.karzek.exercises.domain.model.Exercise
-import com.karzek.exercises.domain.repository.IExerciseRepository
+import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
+import com.karzek.exercises.domain.exercise.model.Exercise
+import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
 import io.reactivex.Single
 import javax.inject.Inject
 

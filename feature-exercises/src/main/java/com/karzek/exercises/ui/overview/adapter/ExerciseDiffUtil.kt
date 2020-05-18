@@ -1,7 +1,7 @@
 package com.karzek.exercises.ui.overview.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.model.Exercise
 
 class ExerciseDiffUtil : DiffUtil.ItemCallback<Exercise>() {
 

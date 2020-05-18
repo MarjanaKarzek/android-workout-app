@@ -12,5 +12,6 @@
   <color name="background">#f8f7f7</color>
   <color name="bgWhiteTransparent">#80ffffff</color>
   <color name="bgSplash">#ffffff</color>
+  <color name="bgWhite">#ffffff</color>
 
 </resources>

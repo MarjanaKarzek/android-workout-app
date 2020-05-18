@@ -1,10 +1,10 @@
-package com.karzek.exercises.domain
+package com.karzek.exercises.domain.exercise
 
-import com.karzek.exercises.domain.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.ErrorUnknown
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.Success
-import com.karzek.exercises.domain.repository.IExerciseRepository
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.ErrorUnknown
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.Success
+import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
 import io.reactivex.Single
 import javax.inject.Inject
 

@@ -2,17 +2,21 @@ package com.karzek.exercises.ui.overview
 
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.util.doOnIoObserveOnMain
-import com.karzek.exercises.domain.IGetExercisesUseCase
-import com.karzek.exercises.domain.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.Success
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase
+import com.karzek.exercises.domain.category.model.Category
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.Success
+import com.karzek.exercises.domain.exercise.model.Exercise
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
+import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase.Output.Success as SuccessCategories
 
 class ExercisesViewModel @Inject constructor(
-    private val getExercisesUseCase: IGetExercisesUseCase
+    private val getExercisesUseCase: IGetExercisesUseCase,
+    private val getAllCategoriesUseCase: IGetAllCategoriesUseCase
 ) : BaseViewModel() {
 
     private var isLoading = false
@@ -20,9 +24,24 @@ class ExercisesViewModel @Inject constructor(
     private var currentPage = 0
 
     val exercises = BehaviorSubject.create<List<Exercise>>()
+    val filterOptions = BehaviorSubject.create<List<Category>>()
 
     fun getInitialExercises() {
         loadMoreItems()
+    }
+
+    fun getCategoryFilterItems() {
+        getAllCategoriesUseCase.execute(IGetAllCategoriesUseCase.Input)
+            .doOnIoObserveOnMain()
+            .subscribeBy { output ->
+                when (output) {
+                    is SuccessCategories -> filterOptions.onNext(output.categories)
+                    else -> {
+                        //TODO error handling
+                    }
+                }
+            }
+            .addTo(compositeDisposable)
     }
 
     fun onScroll(
@@ -68,7 +87,7 @@ class ExercisesViewModel @Inject constructor(
             visibleItemCount + firstVisibleItemPosition >= totalItemCount
                 && firstVisibleItemPosition >= 0
         } else {
-            visibleItemCount + firstVisibleItemPosition >= filteredItemCount
+            filteredItemCount <= PAGE_SIZE || visibleItemCount + firstVisibleItemPosition >= filteredItemCount
                 && firstVisibleItemPosition >= 0
         }
     }

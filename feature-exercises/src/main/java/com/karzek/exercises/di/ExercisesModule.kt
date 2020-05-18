@@ -1,17 +1,24 @@
 package com.karzek.exercises.di
 
-import com.karzek.exercises.data.ExerciseRemoteDataSource
-import com.karzek.exercises.data.ExerciseRepository
-import com.karzek.exercises.data.IExerciseRemoteDataSource
-import com.karzek.exercises.domain.GetExercisesUseCase
-import com.karzek.exercises.domain.GetImagesForExerciseUseCase
-import com.karzek.exercises.domain.IGetExercisesUseCase
-import com.karzek.exercises.domain.IGetImagesForExerciseUseCase
-import com.karzek.exercises.domain.repository.IExerciseRepository
+import com.karzek.exercises.data.exercise.ExerciseRemoteDataSource
+import com.karzek.exercises.data.exercise.ExerciseRepository
+import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
+import com.karzek.exercises.domain.exercise.GetExercisesUseCase
+import com.karzek.exercises.domain.exercise.GetImagesForExerciseUseCase
+import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
+import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase
+import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
 import dagger.Binds
 import dagger.Module
 
-@Module(includes = [ExercisesApiModule::class])
+@Module(
+    includes = [
+        StorageModule::class,
+        ExercisesApiModule::class,
+        MuscleModule::class,
+        CategoryModule::class
+    ]
+)
 interface ExercisesModule {
 
     @Binds

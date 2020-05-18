@@ -2,11 +2,11 @@ package com.karzek.exercises.ui.detail
 
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.util.doOnIoObserveOnMain
-import com.karzek.exercises.domain.IGetImagesForExerciseUseCase
-import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Input
-import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Output.Success
-import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Output.SuccessNoData
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase
+import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Input
+import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.Success
+import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.SuccessNoData
+import com.karzek.exercises.domain.exercise.model.Exercise
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject

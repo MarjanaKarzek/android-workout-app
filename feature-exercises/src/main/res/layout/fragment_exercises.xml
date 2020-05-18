@@ -19,6 +19,15 @@
         app:title="@string/toolbar_title_exercises"
         />
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/exerciseFilterOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:singleSelection="true"
+        android:background="@color/bgWhite"
+        />
+
   </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.recyclerview.widget.RecyclerView

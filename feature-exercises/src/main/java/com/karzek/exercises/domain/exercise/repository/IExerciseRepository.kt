@@ -1,6 +1,6 @@
-package com.karzek.exercises.domain.repository
+package com.karzek.exercises.domain.exercise.repository
 
-import com.karzek.exercises.domain.model.Exercise
+import com.karzek.exercises.domain.exercise.model.Exercise
 import io.reactivex.Single
 
 interface IExerciseRepository {
