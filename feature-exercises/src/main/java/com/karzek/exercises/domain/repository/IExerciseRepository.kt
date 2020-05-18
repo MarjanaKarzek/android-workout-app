@@ -8,4 +8,6 @@ interface IExerciseRepository {
         currentPage: Int,
         pageSize: Int
     ): Single<Pair<List<Exercise>, Boolean>>
+
+    fun getImageUrls(exerciseId: Int): Single<List<String>>
 }

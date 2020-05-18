@@ -2,21 +2,34 @@ package com.karzek.exercises.ui.detail
 
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.util.doOnIoObserveOnMain
-import com.karzek.exercises.domain.IGetExercisesUseCase
-import com.karzek.exercises.domain.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.IGetExercisesUseCase.Output.Success
+import com.karzek.exercises.domain.IGetImagesForExerciseUseCase
+import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Input
+import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Output.Success
+import com.karzek.exercises.domain.IGetImagesForExerciseUseCase.Output.SuccessNoData
 import com.karzek.exercises.domain.model.Exercise
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
-class ExerciseDetailsViewModel @Inject constructor() : BaseViewModel() {
+class ExerciseDetailsViewModel @Inject constructor(
+    private val getImagesForExerciseUseCase: IGetImagesForExerciseUseCase
+) : BaseViewModel() {
 
     val exerciseDetails = BehaviorSubject.create<Pair<Exercise, List<String>>>()
 
     fun setExercise(exercise: Exercise) {
-        //todo get images for exercise
-        exerciseDetails.onNext(exercise to emptyList())
+        getImagesForExerciseUseCase.execute(Input(exercise.id))
+            .doOnIoObserveOnMain()
+            .subscribeBy { output ->
+                when (output) {
+                    is Success -> exerciseDetails.onNext(exercise to output.imageUrls)
+                    is SuccessNoData -> exerciseDetails.onNext(exercise to emptyList())
+                    else -> {
+                        //TODO error handling
+                    }
+                }
+            }
+            .addTo(compositeDisposable)
     }
 }

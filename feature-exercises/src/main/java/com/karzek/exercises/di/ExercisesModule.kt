@@ -4,7 +4,9 @@ import com.karzek.exercises.data.ExerciseRemoteDataSource
 import com.karzek.exercises.data.ExerciseRepository
 import com.karzek.exercises.data.IExerciseRemoteDataSource
 import com.karzek.exercises.domain.GetExercisesUseCase
+import com.karzek.exercises.domain.GetImagesForExerciseUseCase
 import com.karzek.exercises.domain.IGetExercisesUseCase
+import com.karzek.exercises.domain.IGetImagesForExerciseUseCase
 import com.karzek.exercises.domain.repository.IExerciseRepository
 import dagger.Binds
 import dagger.Module
@@ -14,6 +16,9 @@ interface ExercisesModule {
 
     @Binds
     fun bindGetExercisesUseCase(getExercisesUseCase: GetExercisesUseCase): IGetExercisesUseCase
+
+    @Binds
+    fun bindGetImagesForExerciseUseCase(getImagesForExerciseUseCase: GetImagesForExerciseUseCase): IGetImagesForExerciseUseCase
 
     @Binds
     fun bindExerciseRepository(exerciseRepository: ExerciseRepository): IExerciseRepository

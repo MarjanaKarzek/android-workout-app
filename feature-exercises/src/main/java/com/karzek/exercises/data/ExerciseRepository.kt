@@ -14,4 +14,8 @@ class ExerciseRepository @Inject constructor(
     ): Single<Pair<List<Exercise>, Boolean>> {
         return exerciseRemoteDataSource.getExercises(currentPage, pageSize)
     }
+
+    override fun getImageUrls(exerciseId: Int): Single<List<String>> {
+        return exerciseRemoteDataSource.getImageUrls(exerciseId)
+    }
 }

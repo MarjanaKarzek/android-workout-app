@@ -54,6 +54,13 @@ class ExerciseRemoteDataSource @Inject constructor(
 
     }
 
+    override fun getImageUrls(exerciseId: Int): Single<List<String>> {
+        return exerciseImagesApiService.getExerciseImages(exerciseId)
+            .map { response ->
+                response.images.map { it.imageUrl }
+            }
+    }
+
     private fun addThumbnailImages(exercises: List<Exercise>): Single<List<Exercise>> {
         return Observable.fromIterable(exercises)
             .flatMapSingle { exercise ->
