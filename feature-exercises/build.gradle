@@ -12,6 +12,7 @@ dependencies {
 
   implementation Libs.ReactiveX.Java.rxJava2Android
   implementation Libs.ReactiveX.Kotlin.rxKotlin
+  implementation Libs.ReactiveX.Binding.appcompat
   implementation Libs.ReactiveX.Binding.recyclerView
 
   implementation Libs.AutoDispose.autoDispose

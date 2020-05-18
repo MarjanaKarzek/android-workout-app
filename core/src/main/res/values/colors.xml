@@ -5,7 +5,9 @@
   <color name="colorAccent">#03DAC5</color>
 
   <color name="textPrimary">#555555</color>
+  <color name="textPrimaryLight">#ffffff</color>
   <color name="textSecondary">#777777</color>
+  <color name="textSecondaryLight">#80ffffff</color>
 
   <color name="background">#f8f7f7</color>
   <color name="bgWhiteTransparent">#80ffffff</color>

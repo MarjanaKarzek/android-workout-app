@@ -27,11 +27,12 @@ class ExercisesViewModel @Inject constructor(
 
     fun onScroll(
         visibleItemCount: Int,
+        filteredItemCount: Int,
         totalItemCount: Int,
         firstVisibleItemPosition: Int
     ) {
         if (!isLoading && !isLastPage) {
-            if (areMoreItemsAvailable(visibleItemCount, totalItemCount, firstVisibleItemPosition)) {
+            if (areMoreItemsAvailable(visibleItemCount, filteredItemCount, totalItemCount, firstVisibleItemPosition)) {
                 loadMoreItems()
             }
         }
@@ -59,10 +60,18 @@ class ExercisesViewModel @Inject constructor(
 
     private fun areMoreItemsAvailable(
         visibleItemCount: Int,
+        filteredItemCount: Int,
         totalItemCount: Int,
         firstVisibleItemPosition: Int
-    ) = visibleItemCount + firstVisibleItemPosition >= totalItemCount
-        && firstVisibleItemPosition >= 0
+    ): Boolean {
+        return if (filteredItemCount == totalItemCount) {
+            visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                && firstVisibleItemPosition >= 0
+        } else {
+            visibleItemCount + firstVisibleItemPosition >= filteredItemCount
+                && firstVisibleItemPosition >= 0
+        }
+    }
 
     companion object {
         private const val PAGE_SIZE = 5

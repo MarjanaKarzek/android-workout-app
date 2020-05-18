@@ -89,6 +89,7 @@ object Libs {
         object Binding {
             private const val version = "3.1.0"
             const val binding = "com.jakewharton.rxbinding3:rxbinding:$version"
+            const val appcompat = "com.jakewharton.rxbinding3:rxbinding-appcompat:$version"
             const val recyclerView = "com.jakewharton.rxbinding3:rxbinding-recyclerview:$version"
         }
     }

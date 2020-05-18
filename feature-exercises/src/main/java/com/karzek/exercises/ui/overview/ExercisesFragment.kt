@@ -1,13 +1,18 @@
 package com.karzek.exercises.ui.overview
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jakewharton.rxbinding3.appcompat.itemClicks
+import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.karzek.core.ui.BaseFragment
-import com.karzek.core.ui.binding.itemClicks
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.model.Exercise
 import com.karzek.exercises.ui.detail.ExerciseDetailsActivity
@@ -49,9 +54,10 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
                 val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
+                val filteredItemCount = layoutManager.itemCount
+                val totalItemCount = adapter.getTotalItemCount()
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                viewModel.onScroll(visibleItemCount, totalItemCount, firstVisibleItemPosition)
+                viewModel.onScroll(visibleItemCount, filteredItemCount, totalItemCount, firstVisibleItemPosition)
             }
 
     }
@@ -60,7 +66,12 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         viewModel.exercises
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe { exercises ->
-                adapter.addData(exercises)
+                if (adapter.getTotalItemCount() == 0) {
+                    adapter.initData(exercises)
+                } else {
+                    adapter.addData(exercises)
+                    adapter.applyLastFilter()
+                }
             }
     }
 
@@ -69,20 +80,29 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     }
 
     private fun setupToolbar() {
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        setHasOptionsMenu(true)
         toolbar.itemClicks()
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
-                when (it.itemId) {
-                    R.id.search -> {
-                        //TODO show search
-                        Toast.makeText(context, "On search clicked", Toast.LENGTH_SHORT).show()
-                    }
-                    R.id.filter -> {
-                        //TODO show filter
-                        Toast.makeText(context, "On filter clicked", Toast.LENGTH_SHORT).show()
-                    }
+                if (it.itemId == R.id.filter) {
+                    //TODO show filter
+                    Toast.makeText(context, "On filter clicked", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater
+    ) {
+        requireActivity().menuInflater.inflate(R.menu.menu_exercises, menu)
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.queryHint = getString(R.string.exercise_search_hint)
+        searchView.queryTextChanges()
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe {
+                adapter.filter.filter(it)
+            }
+    }
 }

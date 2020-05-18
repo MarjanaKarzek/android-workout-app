@@ -10,5 +10,6 @@ class SplashActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
 
         startActivity(MainActivity.newIntent(this))
+        finish()
     }
 }

@@ -3,4 +3,5 @@
   <string name="toolbar_title_exercises">Exercises</string>
   <string name="search">Search</string>
   <string name="filter">Filter</string>
+  <string name="exercise_search_hint">Exercise Name</string>
 </resources>

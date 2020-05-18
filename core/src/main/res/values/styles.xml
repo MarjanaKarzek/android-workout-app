@@ -5,6 +5,21 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
     <item name="android:windowBackground">@color/background</item>
+    <item name="searchViewStyle">@style/Widget.AppCompat.SearchView.White</item>
+    <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView.White</item>
+  </style>
+
+  <style name="Widget.AppCompat.SearchView.White">
+    <item name="closeIcon">@drawable/ic_close_white</item>
+    <item name="searchIcon">@drawable/ic_search_white</item>
+  </style>
+
+  <style name="Widget.AppCompat.AutoCompleteTextView.White">
+    <item name="android:textColor">@color/textPrimaryLight</item>
+    <item name="android:editTextColor">@color/textPrimaryLight</item>
+    <item name="android:textCursorDrawable">@drawable/cursor</item>
+    <item name="android:textColorHint">@color/textSecondaryLight</item>
+    <item name="android:colorControlActivated">@color/textPrimaryLight</item>
   </style>
 
   <style name="TextStyle">
