@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.text.Html
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.karzek.core.ui.BaseActivity
 import com.karzek.exercises.R
+import com.karzek.exercises.R.string
 import com.karzek.exercises.domain.exercise.model.Exercise
 import com.karzek.exercises.ui.detail.adapter.ExerciseImagesAdapter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -61,6 +63,12 @@ class ExerciseDetailsActivity : BaseActivity() {
                 } else {
                     loadingView.visibility = View.GONE
                 }
+            }
+
+        viewModel.error
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe {
+                Toast.makeText(this, getString(string.error_on_loading_images), Toast.LENGTH_LONG).show()
             }
 
         viewModel.exerciseDetails
