@@ -44,7 +44,7 @@ class ExercisesViewModel @Inject constructor(
             .addTo(compositeDisposable)
     }
 
-    fun onScroll(
+    fun checkForMoreItems(
         visibleItemCount: Int,
         filteredItemCount: Int,
         totalItemCount: Int,

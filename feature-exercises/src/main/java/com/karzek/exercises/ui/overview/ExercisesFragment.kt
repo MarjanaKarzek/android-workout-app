@@ -58,13 +58,16 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         recyclerView.scrollEvents()
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
-                val visibleItemCount = layoutManager.childCount
-                val filteredItemCount = layoutManager.itemCount
-                val totalItemCount = adapter.getTotalItemCount()
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                viewModel.onScroll(visibleItemCount, filteredItemCount, totalItemCount, firstVisibleItemPosition)
+                checkForMoreItems()
             }
+    }
 
+    private fun checkForMoreItems() {
+        val visibleItemCount = layoutManager.childCount
+        val filteredItemCount = layoutManager.itemCount
+        val totalItemCount = adapter.getTotalItemCount()
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        viewModel.checkForMoreItems(visibleItemCount, filteredItemCount, totalItemCount, firstVisibleItemPosition)
     }
 
     private fun subscribeToViewModel() {
@@ -91,6 +94,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                 } else {
                     adapter.addData(exercises)
                     adapter.applyLastFilter()
+                    checkForMoreItems()
                 }
             }
     }
@@ -135,6 +139,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
                 adapter.filter.filter(it)
+                checkForMoreItems()
             }
     }
 
