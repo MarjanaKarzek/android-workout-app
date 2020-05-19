@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.karzek.core.ui.BaseFragment
+import com.karzek.core.ui.binding.checkedChanges
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.category.model.Category
 import com.karzek.exercises.domain.exercise.model.Exercise
@@ -115,10 +116,12 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     }
 
     private fun setupFilterOptionsListener() {
-        exerciseFilterOptions.setOnCheckedChangeListener { group, checkedId ->
-            val selectedCategory = group.findViewById<Chip?>(checkedId)?.tag as Category?
-            adapter.setCategoryFilter(selectedCategory)
-        }
+        exerciseFilterOptions.checkedChanges()
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe {
+                val selectedCategory = exerciseFilterOptions.findViewById<Chip?>(it)?.tag as Category?
+                adapter.setCategoryFilter(selectedCategory)
+            }
     }
 
     override fun onCreateOptionsMenu(
