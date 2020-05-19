@@ -16,9 +16,9 @@ class CategoryRepository @Inject constructor(
         return categoryLocalDataSource.getAllCategories()
             .switchIfEmpty(
                 categoryRemoteDataSource.getAllCategories()
-                    .flatMap {
-                        categoryLocalDataSource.setAllCategories(it)
-                            .andThen(Single.just(it))
+                    .flatMap { categories ->
+                        categoryLocalDataSource.setAllCategories(categories)
+                            .andThen(Single.just(categories))
                     }
             )
     }

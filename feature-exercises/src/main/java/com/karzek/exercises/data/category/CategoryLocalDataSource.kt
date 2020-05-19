@@ -19,24 +19,17 @@ class CategoryLocalDataSource @Inject constructor(
 
     override fun getAllCategories(): Maybe<List<Category>> {
         return Single.just(isCacheValid())
-            .flatMap {
-                if (it) {
-                    categoryDao.getAll()
-                } else {
-                    categoryDao.deleteAll()
-                        .andThen(Single.just(emptyList()))
-                }
+            .filter { it }
+            .flatMapSingle {
+                categoryDao.getAll()
             }.flatMapMaybe {
-                if (it.isEmpty()) {
-                    Maybe.empty()
-                } else {
-                    Maybe.just(it.toModels())
-                }
+                Maybe.just(it.toModels())
             }
     }
 
     override fun setAllCategories(categories: List<Category>): Completable {
         return Completable.fromCallable {
+            categoryDao.deleteAll()
             val entities = categories.map {
                 CategoryEntity(it.id, it.name)
             }

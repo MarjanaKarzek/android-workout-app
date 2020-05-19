@@ -19,24 +19,17 @@ class MuscleLocalDataSource @Inject constructor(
 
     override fun getAllMuscles(): Maybe<List<Muscle>> {
         return Single.just(isCacheValid())
-            .flatMap {
-                if (it) {
-                    muscleDao.getAll()
-                } else {
-                    muscleDao.deleteAll()
-                        .andThen(Single.just(emptyList()))
-                }
+            .filter { it }
+            .flatMapSingle {
+                muscleDao.getAll()
             }.flatMapMaybe {
-                if (it.isEmpty()) {
-                    Maybe.empty()
-                } else {
-                    Maybe.just(it.toModels())
-                }
+                Maybe.just(it.toModels())
             }
     }
 
     override fun setAllMuscles(muscles: List<Muscle>): Completable {
         return Completable.fromCallable {
+            muscleDao.deleteAll()
             val muscleEntities = muscles.map {
                 MuscleEntity(it.id, it.name)
             }
