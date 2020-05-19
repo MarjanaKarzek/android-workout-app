@@ -96,4 +96,9 @@
 
   </androidx.core.widget.NestedScrollView>
 
+  <include
+      android:id="@+id/loadingView"
+      layout="@layout/component_overlay_circular_progress"
+      />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

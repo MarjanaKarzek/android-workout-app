@@ -16,19 +16,24 @@ class ExerciseDetailsViewModel @Inject constructor(
     private val getImagesForExerciseUseCase: IGetImagesForExerciseUseCase
 ) : BaseViewModel() {
 
-    val exerciseDetails = BehaviorSubject.create<Pair<Exercise, List<String>>>()
+    val exerciseDetails = BehaviorSubject.create<Exercise>()
+    val exerciseImages = BehaviorSubject.create<List<String>>()
+    val loading = BehaviorSubject.create<Boolean>()
 
     fun setExercise(exercise: Exercise) {
+        loading.onNext(true)
+        exerciseDetails.onNext(exercise)
         getImagesForExerciseUseCase.execute(Input(exercise.id))
             .doOnIoObserveOnMain()
             .subscribeBy { output ->
                 when (output) {
-                    is Success -> exerciseDetails.onNext(exercise to output.imageUrls)
-                    is SuccessNoData -> exerciseDetails.onNext(exercise to emptyList())
+                    is Success -> exerciseImages.onNext(output.imageUrls)
+                    is SuccessNoData -> exerciseImages.onComplete()
                     else -> {
                         //TODO error handling
                     }
                 }
+                loading.onNext(false)
             }
             .addTo(compositeDisposable)
     }

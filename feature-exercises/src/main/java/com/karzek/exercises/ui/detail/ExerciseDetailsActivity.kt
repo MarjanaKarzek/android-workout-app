@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_exercise_details.exerciseDescript
 import kotlinx.android.synthetic.main.activity_exercise_details.exerciseEquipment
 import kotlinx.android.synthetic.main.activity_exercise_details.exerciseImagesList
 import kotlinx.android.synthetic.main.activity_exercise_details.exerciseMuscles
+import kotlinx.android.synthetic.main.activity_exercise_details.loadingView
 import kotlinx.android.synthetic.main.activity_exercise_details.toolbar
 
 class ExerciseDetailsActivity : BaseActivity() {
@@ -52,21 +53,35 @@ class ExerciseDetailsActivity : BaseActivity() {
     }
 
     private fun subscribeToViewModel() {
+        viewModel.loading
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe { isLoading ->
+                if(isLoading) {
+                    loadingView.visibility = View.VISIBLE
+                } else {
+                    loadingView.visibility = View.GONE
+                }
+            }
+
         viewModel.exerciseDetails
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
-            .subscribe { (exercise, imageUrls) ->
-                displayExerciseDetails(exercise, imageUrls)
+            .subscribe { exercise ->
+                displayExerciseDetails(exercise)
+            }
+
+        viewModel.exerciseImages
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe { imageUrls ->
+                if (!imageUrls.isNullOrEmpty()) {
+                    exerciseImagesList.visibility = View.VISIBLE
+                    adapter.setData(imageUrls)
+                }
             }
     }
 
     private fun displayExerciseDetails(
-        exercise: Exercise,
-        imageUrls: List<String>
+        exercise: Exercise
     ) {
-        if (!imageUrls.isNullOrEmpty()) {
-            exerciseImagesList.visibility = View.VISIBLE
-            adapter.setData(imageUrls)
-        }
         supportActionBar?.run {
             title = exercise.name
             subtitle = exercise.category
