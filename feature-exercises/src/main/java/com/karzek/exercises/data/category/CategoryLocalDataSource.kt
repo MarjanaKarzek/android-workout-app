@@ -19,11 +19,16 @@ class CategoryLocalDataSource @Inject constructor(
 
     override fun getAllCategories(): Maybe<List<Category>> {
         return Single.just(isCacheValid())
-            .filter { it }
-            .flatMapSingle {
-                categoryDao.getAll()
-            }.flatMapMaybe {
-                Maybe.just(it.toModels())
+            .flatMapMaybe {
+                if(it) {
+                    categoryDao.getAll()
+                        .map { entities ->
+                            entities.toModels()
+                        }
+                        .toMaybe()
+                } else {
+                    Maybe.empty()
+                }
             }
     }
 
@@ -34,13 +39,14 @@ class CategoryLocalDataSource @Inject constructor(
                 CategoryEntity(it.id, it.name)
             }
             categoryDao.insertAll(entities)
+            sharedPreferences.edit().putLong(CATEGORY_CACHE_TIME_STAMP, Date().time).commit()
         }
     }
 
     private fun isCacheValid(): Boolean {
         val currentTime = Date().time
-        val timestamp = sharedPreferences.getLong(CATEGORY_CACHE_TIME_STAMP, currentTime)
-        return (timestamp + ONE_DAY) >= currentTime
+        val timestamp = sharedPreferences.getLong(CATEGORY_CACHE_TIME_STAMP, 0)
+        return (timestamp + ONE_DAY) > currentTime
     }
 
     companion object {

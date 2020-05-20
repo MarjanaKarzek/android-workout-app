@@ -8,6 +8,7 @@ import com.karzek.exercises.database.category.CategoryEntity
 import com.karzek.exercises.domain.category.model.Category
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.reactivex.Single
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ import java.util.Date
 
 internal class CategoryLocalDataSourceTest : BaseUnitTest() {
 
-    private val sharedPreferences: SharedPreferences = mockk()
+    private val sharedPreferences: SharedPreferences = mockk(relaxed = true)
     private val categoryDao: CategoryDao = mockk(relaxed = true)
 
     private lateinit var dataSource: ICategoryLocalDataSource
@@ -53,6 +54,16 @@ internal class CategoryLocalDataSourceTest : BaseUnitTest() {
 
         dataSource.getAllCategories().test()
             .assertEmpty()
+    }
+
+    @Test
+    fun `setAllCategories removes the old data sets it to the new data and updates the timestamp`() {
+        dataSource.setAllCategories(categories).test()
+            .assertComplete()
+
+        verify(exactly = 1) { categoryDao.deleteAll() }
+        verify(exactly = 1) { categoryDao.insertAll(categoriesEntities) }
+        verify(exactly = 1) { sharedPreferences.edit().putLong("CATEGORY_CACHE_TIME_STAMP", any()) }
     }
 
     @Test

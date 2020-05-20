@@ -17,5 +17,5 @@ interface CategoryDao {
     fun deleteAll(): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(muscles: List<CategoryEntity>)
+    fun insertAll(categories: List<CategoryEntity>)
 }

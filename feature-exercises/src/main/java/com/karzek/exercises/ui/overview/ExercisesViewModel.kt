@@ -8,6 +8,8 @@ import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
 import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
 import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.Success
 import com.karzek.exercises.domain.exercise.model.Exercise
+import com.karzek.exercises.ui.overview.error.NetworkErrorOnLoadingItems
+import com.karzek.exercises.ui.overview.error.NetworkErrorOnViewInit
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
@@ -19,27 +21,50 @@ class ExercisesViewModel @Inject constructor(
     private val getAllCategoriesUseCase: IGetAllCategoriesUseCase
 ) : BaseViewModel() {
 
-    private var isLoading = false
+    private var isLoadingExercises = false
     private var isLastPage = false
     private var currentPage = 0
 
     val exercises = BehaviorSubject.create<List<Exercise>>()
     val filterOptions = BehaviorSubject.create<List<Category>>()
+    val viewLoading = BehaviorSubject.create<Boolean>()
+    val listLoading = BehaviorSubject.create<Boolean>()
 
-    fun getInitialExercises() {
-        loadMoreItems()
-    }
-
-    fun getCategoryFilterItems() {
+    fun retrieveInitialData() {
+        viewLoading.onNext(true)
+        isLoadingExercises = true
         getAllCategoriesUseCase.execute(IGetAllCategoriesUseCase.Input)
             .doOnIoObserveOnMain()
             .subscribeBy { output ->
                 when (output) {
-                    is SuccessCategories -> filterOptions.onNext(output.categories)
+                    is SuccessCategories -> {
+                        loadMoreItems()
+                        filterOptions.onNext(output.categories)
+                    }
                     else -> {
-                        //TODO error handling
+                        viewLoading.onNext(false)
+                        error.onNext(NetworkErrorOnViewInit)
                     }
                 }
+            }
+            .addTo(compositeDisposable)
+    }
+
+    private fun loadMoreItems() {
+        getExercisesUseCase.execute(Input(currentPage, PAGE_SIZE))
+            .doOnIoObserveOnMain()
+            .subscribeBy { output ->
+                isLoadingExercises = false
+                when (output) {
+                    is Success -> {
+                        currentPage += 1
+                        isLastPage = output.isLastPage
+                        exercises.onNext(output.exercises)
+                    }
+                    else -> error.onNext(NetworkErrorOnLoadingItems)
+                }
+                listLoading.onNext(false)
+                viewLoading.onNext(false)
             }
             .addTo(compositeDisposable)
     }
@@ -48,46 +73,40 @@ class ExercisesViewModel @Inject constructor(
         visibleItemCount: Int,
         filteredItemCount: Int,
         totalItemCount: Int,
-        firstVisibleItemPosition: Int
+        firstVisibleItemPosition: Int,
+        isScrollDirectionDown: Boolean
     ) {
-        if (!isLoading && !isLastPage) {
-            if (areMoreItemsAvailable(visibleItemCount, filteredItemCount, totalItemCount, firstVisibleItemPosition)) {
+        if (!isLoadingExercises && !isLastPage) {
+            if (
+                areMoreItemsAvailable(
+                    visibleItemCount,
+                    filteredItemCount,
+                    totalItemCount,
+                    firstVisibleItemPosition,
+                    isScrollDirectionDown
+                )
+            ) {
+                listLoading.onNext(true)
+                isLoadingExercises = true
                 loadMoreItems()
             }
         }
-    }
-
-    private fun loadMoreItems() {
-        isLoading = true
-        getExercisesUseCase.execute(Input(currentPage, PAGE_SIZE))
-            .doOnIoObserveOnMain()
-            .subscribeBy { output ->
-                when (output) {
-                    is Success -> {
-                        currentPage += 1
-                        isLastPage = output.isLastPage
-                        exercises.onNext(output.exercises)
-                    }
-                    else -> {
-                        //TODO error handling
-                    }
-                }
-                isLoading = false
-            }
-            .addTo(compositeDisposable)
     }
 
     private fun areMoreItemsAvailable(
         visibleItemCount: Int,
         filteredItemCount: Int,
         totalItemCount: Int,
-        firstVisibleItemPosition: Int
+        firstVisibleItemPosition: Int,
+        isScrollDirectionDown: Boolean
     ): Boolean {
         return if (filteredItemCount == totalItemCount) {
-            visibleItemCount + firstVisibleItemPosition >= totalItemCount
+            //check for full list of exercises
+            isScrollDirectionDown && visibleItemCount + firstVisibleItemPosition >= totalItemCount
                 && firstVisibleItemPosition >= 0
         } else {
-            filteredItemCount <= PAGE_SIZE || visibleItemCount + firstVisibleItemPosition >= filteredItemCount
+            //check for filtered list of exercises
+            filteredItemCount <= PAGE_SIZE || isScrollDirectionDown && visibleItemCount + firstVisibleItemPosition >= filteredItemCount
                 && firstVisibleItemPosition >= 0
         }
     }

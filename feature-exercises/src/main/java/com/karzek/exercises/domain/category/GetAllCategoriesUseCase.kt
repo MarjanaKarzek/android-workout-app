@@ -6,6 +6,7 @@ import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase.Output.Erro
 import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase.Output.Success
 import com.karzek.exercises.domain.category.repository.ICategoryRepository
 import io.reactivex.Single
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetAllCategoriesUseCase @Inject constructor(
@@ -18,6 +19,7 @@ class GetAllCategoriesUseCase @Inject constructor(
                 Success(it) as Output
             }
             .onErrorReturn {
+                Timber.e(it)
                 ErrorUnknown
             }
     }

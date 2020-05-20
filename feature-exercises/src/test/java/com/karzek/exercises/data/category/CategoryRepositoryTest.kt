@@ -8,6 +8,7 @@ import com.karzek.exercises.domain.category.repository.ICategoryRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.jupiter.api.BeforeEach
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test
 internal class CategoryRepositoryTest : BaseUnitTest() {
 
     private val remoteDataSource: ICategoryRemoteDataSource = mockk(relaxed = true)
-    private val localDataSource: ICategoryLocalDataSource = mockk(relaxed = true)
+    private val localDataSource: ICategoryLocalDataSource = mockk()
 
     private val categories = listOf(
         Category(0, "Category 1"),
@@ -39,6 +40,18 @@ internal class CategoryRepositoryTest : BaseUnitTest() {
             .assertValue(categories)
 
         verify(exactly = 0) { localDataSource.setAllCategories(any()) }
+    }
+
+    @Test
+    fun `getAllCategories returns expected output from remote if cache is invalid`() {
+        every { localDataSource.getAllCategories() } returns Maybe.empty()
+        every { localDataSource.setAllCategories(categories) } returns Completable.complete()
+        every { remoteDataSource.getAllCategories() } returns Single.just(categories)
+
+        repository.getAllCategories().test()
+            .assertValue(categories)
+
+        verify(exactly = 1) { localDataSource.setAllCategories(categories) }
     }
 
     @Test

@@ -1,11 +1,10 @@
 package com.karzek.exercises.ui.detail
 
 import com.karzek.core.ui.BaseViewModel
+import com.karzek.core.ui.error.UIError.NetworkConnection
 import com.karzek.core.util.doOnIoObserveOnMain
 import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase
 import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Input
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.ErrorUnknown
 import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.Success
 import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.SuccessNoData
 import com.karzek.exercises.domain.exercise.model.Exercise
@@ -21,7 +20,6 @@ class ExerciseDetailsViewModel @Inject constructor(
     val exerciseDetails = BehaviorSubject.create<Exercise>()
     val exerciseImages = BehaviorSubject.create<List<String>>()
     val loading = BehaviorSubject.create<Boolean>()
-    val error = BehaviorSubject.create<Output>()
 
     fun setExercise(exercise: Exercise) {
         loading.onNext(true)
@@ -32,7 +30,7 @@ class ExerciseDetailsViewModel @Inject constructor(
                 when (output) {
                     is Success -> exerciseImages.onNext(output.imageUrls)
                     is SuccessNoData -> exerciseImages.onComplete()
-                    else -> error.onNext(ErrorUnknown)
+                    else -> error.onNext(NetworkConnection)
                 }
                 loading.onNext(false)
             }

@@ -8,6 +8,7 @@ import com.karzek.exercises.domain.muscle.repository.IMuscleRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.jupiter.api.BeforeEach
@@ -39,6 +40,18 @@ internal class MuscleRepositoryTest : BaseUnitTest() {
             .assertValue(muscles)
 
         verify(exactly = 0) { localDataSource.setAllMuscles(any()) }
+    }
+
+    @Test
+    fun `getAllMuscles returns expected output from remote if cache is invalid`() {
+        every { localDataSource.getAllMuscles() } returns Maybe.empty()
+        every { localDataSource.setAllMuscles(muscles) } returns Completable.complete()
+        every { remoteDataSource.getAllMuscles() } returns Single.just(muscles)
+
+        repository.getAllMuscles().test()
+            .assertValue(muscles)
+
+        verify(exactly = 1) { localDataSource.setAllMuscles(muscles) }
     }
 
     @Test

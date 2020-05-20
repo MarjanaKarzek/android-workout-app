@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -23,9 +24,9 @@
         android:id="@+id/exerciseFilterOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bgWhite"
         android:visibility="gone"
         app:singleSelection="true"
-        android:background="@color/bgWhite"
         />
 
   </com.google.android.material.appbar.AppBarLayout>
@@ -35,6 +36,20 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      tools:visibility="gone"
+      />
+
+  <include
+      android:id="@+id/loadingView"
+      layout="@layout/component_overlay_circular_progress"
+      tools:visibility="gone"
+      />
+
+  <include
+      android:id="@+id/errorView"
+      layout="@layout/component_error_view_with_action"
+      android:visibility="gone"
+      tools:visibility="visible"
       />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

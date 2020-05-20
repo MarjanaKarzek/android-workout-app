@@ -1,4 +1,4 @@
-package com.karzek.exercises.ui.overview.adapter
+package com.karzek.exercises.ui.overview.adapter.viewholder
 
 import android.view.View
 import android.view.View.OnClickListener
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.karzek.core.ui.images.GlideApp
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.exercise.model.Exercise
+import com.karzek.exercises.ui.overview.adapter.ExerciseInteractionListener
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseCategory
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseEquipment
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseImage

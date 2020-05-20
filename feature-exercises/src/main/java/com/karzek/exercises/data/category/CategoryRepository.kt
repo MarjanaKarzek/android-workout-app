@@ -17,6 +17,9 @@ class CategoryRepository @Inject constructor(
             .switchIfEmpty(
                 categoryRemoteDataSource.getAllCategories()
                     .flatMap { categories ->
+                        if(categories.isEmpty()) {
+                            throw IllegalStateException("categories cannot be empty")
+                        }
                         categoryLocalDataSource.setAllCategories(categories)
                             .andThen(Single.just(categories))
                     }

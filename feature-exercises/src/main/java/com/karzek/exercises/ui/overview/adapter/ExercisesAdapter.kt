@@ -5,17 +5,23 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.karzek.exercises.R
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.karzek.exercises.R.layout
 import com.karzek.exercises.domain.category.model.Category
 import com.karzek.exercises.domain.exercise.model.Exercise
+import com.karzek.exercises.ui.overview.adapter.ExerciseAdapterViewType.EXERCISE
+import com.karzek.exercises.ui.overview.adapter.ExerciseAdapterViewType.LOADING
+import com.karzek.exercises.ui.overview.adapter.viewholder.ExerciseViewHolder
+import com.karzek.exercises.ui.overview.adapter.viewholder.LoadingViewHolder
 import java.util.Locale
 
 class ExercisesAdapter(
     private val interactionListener: ExerciseInteractionListener
-) : RecyclerView.Adapter<ExerciseViewHolder>(), Filterable {
+) : RecyclerView.Adapter<ViewHolder>(), Filterable {
 
     private var lastSearch: CharSequence? = null
     private var lastSelectedCategory: Category? = null
+    private var isLoading = false
 
     private val allData = ArrayList<Exercise>()
     private val data = ArrayList<Exercise>()
@@ -23,16 +29,32 @@ class ExercisesAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = ExerciseViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.view_holder_exercise, parent, false),
-        interactionListener
-    )
+    ): ViewHolder {
+        return if (viewType == EXERCISE.ordinal) {
+            ExerciseViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(layout.view_holder_exercise, parent, false),
+                interactionListener
+            )
+        } else {
+            LoadingViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(layout.view_holder_loading, parent, false)
+            )
+        }
+    }
 
     override fun onBindViewHolder(
-        holder: ExerciseViewHolder,
+        holder: ViewHolder,
         position: Int
-    ) = holder.bind(data[position])
+    ) {
+        when (holder) {
+            is ExerciseViewHolder -> holder.bind(data[position])
+            else -> {
+                //do nothing
+            }
+        }
+    }
 
     fun initData(data: List<Exercise>) {
         allData.addAll(data)
@@ -42,18 +64,30 @@ class ExercisesAdapter(
 
     fun addData(data: List<Exercise>) {
         allData.addAll(data)
+        filter.filter(lastSearch)
     }
 
-    override fun getItemCount() = data.size
+    override fun getItemViewType(position: Int): Int {
+        return if (isLoading && position == data.size) {
+            LOADING.ordinal
+        } else {
+            EXERCISE.ordinal
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (isLoading) {
+            data.size + 1
+        } else {
+            data.size
+        }
+    }
 
     fun getTotalItemCount() = allData.size
 
-    override fun getFilter(): Filter {
-        return exerciseFilter
-    }
-
-    fun applyLastFilter() {
-        this.filter.filter(lastSearch)
+    fun setLoading(isLoading: Boolean) {
+        this.isLoading = isLoading
+        notifyDataSetChanged()
     }
 
     private val exerciseFilter = object : Filter() {
@@ -71,6 +105,7 @@ class ExercisesAdapter(
             return result
         }
 
+        @Suppress("UNCHECKED_CAST")
         override fun publishResults(
             constraint: CharSequence?,
             results: FilterResults?
@@ -82,6 +117,10 @@ class ExercisesAdapter(
             }
         }
 
+    }
+
+    override fun getFilter(): Filter {
+        return exerciseFilter
     }
 
     private fun applySearchFilter(constraint: CharSequence?): List<Exercise> {
