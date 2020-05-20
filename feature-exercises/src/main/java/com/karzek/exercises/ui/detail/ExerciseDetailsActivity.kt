@@ -58,7 +58,7 @@ class ExerciseDetailsActivity : BaseActivity() {
         viewModel.loading
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe { isLoading ->
-                if(isLoading) {
+                if (isLoading) {
                     loadingView.visibility = View.VISIBLE
                 } else {
                     loadingView.visibility = View.GONE
@@ -92,9 +92,9 @@ class ExerciseDetailsActivity : BaseActivity() {
     ) {
         supportActionBar?.run {
             title = exercise.name
-            subtitle = exercise.category
+            subtitle = exercise.category.name
         }
-        if (!exercise.description.isNullOrEmpty()) {
+        if (!exercise.description.isNullOrEmpty() && exercise.description.length > 3) {
             exerciseDescription.visibility = View.VISIBLE
             exerciseDescription.text = Html.fromHtml(exercise.description, Html.FROM_HTML_MODE_COMPACT)
         }

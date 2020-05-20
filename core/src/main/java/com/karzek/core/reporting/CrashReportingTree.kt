@@ -9,7 +9,7 @@ class CrashReportingTree : Tree() {
         message: String,
         t: Throwable?
     ) {
-        //TODO implement reporting tool
+        //reporting can be performed here
     }
 
 }

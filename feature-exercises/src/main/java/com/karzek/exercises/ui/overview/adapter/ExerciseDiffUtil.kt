@@ -9,13 +9,13 @@ class ExerciseDiffUtil : DiffUtil.ItemCallback<Exercise>() {
         oldItem: Exercise,
         newItem: Exercise
     ): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
         oldItem: Exercise,
         newItem: Exercise
     ): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem == newItem
     }
 }

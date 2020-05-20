@@ -35,13 +35,9 @@
       android:id="@+id/recyclerView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:paddingBottom="54dp"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:visibility="gone"
-      />
-
-  <include
-      android:id="@+id/loadingView"
-      layout="@layout/component_overlay_circular_progress"
       tools:visibility="gone"
       />
 
@@ -51,5 +47,21 @@
       android:visibility="gone"
       tools:visibility="visible"
       />
+
+  <FrameLayout
+      android:id="@+id/loadingView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:layout_margin="16dp"
+      >
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+  </FrameLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

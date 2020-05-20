@@ -1,9 +1,9 @@
-package com.karzek.exercises.domain.exercise
+package com.karzek.exercises.domain.exerciseimage
 
 import com.karzek.core.domain.BaseSingleUseCase
 import com.karzek.core.domain.BaseUseCase
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Input
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase.Input
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase.Output
 
 interface IGetImagesForExerciseUseCase : BaseSingleUseCase<Input, Output> {
 

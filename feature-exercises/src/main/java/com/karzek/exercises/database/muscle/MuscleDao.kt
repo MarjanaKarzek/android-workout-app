@@ -10,6 +10,9 @@ import io.reactivex.Single
 @Dao
 interface MuscleDao {
 
+    @Query("SELECT COUNT(muscleId) FROM muscle_table")
+    fun countItems(): Single<Int>
+
     @Query("SELECT * from muscle_table")
     fun getAll(): Single<List<MuscleEntity>>
 

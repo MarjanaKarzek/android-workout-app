@@ -10,6 +10,9 @@ import io.reactivex.Single
 @Dao
 interface CategoryDao {
 
+    @Query("SELECT COUNT(categoryId) FROM category_table")
+    fun countItems(): Single<Int>
+
     @Query("SELECT * from category_table")
     fun getAll(): Single<List<CategoryEntity>>
 

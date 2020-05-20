@@ -10,6 +10,9 @@ dependencies {
   implementation Libs.Google.material
   implementation Libs.Animator.recyclerViewAnimators
 
+  implementation Libs.AndroidArch.paging
+  implementation Libs.AndroidArch.rxJava2
+
   implementation Libs.ReactiveX.Java.rxJava2Android
   implementation Libs.ReactiveX.Kotlin.rxKotlin
   implementation Libs.ReactiveX.Binding.appcompat

@@ -17,6 +17,12 @@ object Libs {
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     }
 
+    object AndroidArch {
+        private const val version = "2.1.2"
+        const val paging = "androidx.paging:paging-runtime-ktx:$version"
+        const val rxJava2 = "androidx.paging:paging-rxjava2-ktx:$version"
+    }
+
     object AndroidX {
         const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val coreKtx = "androidx.core:core-ktx:1.2.0"

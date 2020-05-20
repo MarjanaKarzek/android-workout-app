@@ -1,15 +1,17 @@
 package com.karzek.exercises.ui.overview
 
+import androidx.paging.PagedList
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.util.doOnIoObserveOnMain
 import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase
 import com.karzek.exercises.domain.category.model.Category
-import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
-import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Input
-import com.karzek.exercises.domain.exercise.IGetExercisesUseCase.Output.Success
 import com.karzek.exercises.domain.exercise.model.Exercise
-import com.karzek.exercises.ui.overview.error.NetworkErrorOnLoadingItems
+import com.karzek.exercises.domain.exercise.model.LoadingState
+import com.karzek.exercises.domain.exercise.repository.IPagedExerciseProvider
+import com.karzek.exercises.domain.validation.IValidateCacheUseCase
+import com.karzek.exercises.domain.validation.IValidateCacheUseCase.Output.Success
 import com.karzek.exercises.ui.overview.error.NetworkErrorOnViewInit
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
@@ -17,32 +19,46 @@ import javax.inject.Inject
 import com.karzek.exercises.domain.category.IGetAllCategoriesUseCase.Output.Success as SuccessCategories
 
 class ExercisesViewModel @Inject constructor(
-    private val getExercisesUseCase: IGetExercisesUseCase,
-    private val getAllCategoriesUseCase: IGetAllCategoriesUseCase
+    private val validateCacheUseCase: IValidateCacheUseCase,
+    private val getAllCategoriesUseCase: IGetAllCategoriesUseCase,
+    private val pagedExerciseProvider: IPagedExerciseProvider
 ) : BaseViewModel() {
 
-    private var isLoadingExercises = false
-    private var isLastPage = false
-    private var currentPage = 0
+    init {
+        initialize()
+    }
 
-    val exercises = BehaviorSubject.create<List<Exercise>>()
+    private var exercisesDataSource: Observable<PagedList<Exercise>>? = null
+
+    val exercises: Observable<PagedList<Exercise>>
+        get() {
+            if (exercisesDataSource == null) {
+                exercisesDataSource = pagedExerciseProvider.getExercises()
+            }
+            return exercisesDataSource ?: throw IllegalStateException("exercise data source was null")
+        }
+
+    val initialized = BehaviorSubject.create<Boolean>()
     val filterOptions = BehaviorSubject.create<List<Category>>()
-    val viewLoading = BehaviorSubject.create<Boolean>()
-    val listLoading = BehaviorSubject.create<Boolean>()
+    val loadingStatus: Observable<LoadingState> = pagedExerciseProvider.getBoundaryState()
+        .switchMap {
+            onBoundaryItemLoaded()
+        }
 
-    fun retrieveInitialData() {
-        viewLoading.onNext(true)
-        isLoadingExercises = true
-        getAllCategoriesUseCase.execute(IGetAllCategoriesUseCase.Input)
+    private fun onBoundaryItemLoaded(): BehaviorSubject<LoadingState> {
+        return pagedExerciseProvider.appendExercises()
+    }
+
+    fun initialize() {
+        validateCacheUseCase.execute(IValidateCacheUseCase.Input)
             .doOnIoObserveOnMain()
             .subscribeBy { output ->
                 when (output) {
-                    is SuccessCategories -> {
-                        loadMoreItems()
-                        filterOptions.onNext(output.categories)
+                    is Success -> {
+                        setupFilterLabels()
+                        initialized.onNext(true)
                     }
                     else -> {
-                        viewLoading.onNext(false)
                         error.onNext(NetworkErrorOnViewInit)
                     }
                 }
@@ -50,68 +66,37 @@ class ExercisesViewModel @Inject constructor(
             .addTo(compositeDisposable)
     }
 
-    private fun loadMoreItems() {
-        getExercisesUseCase.execute(Input(currentPage, PAGE_SIZE))
+    private fun setupFilterLabels() {
+        getAllCategoriesUseCase.execute(IGetAllCategoriesUseCase.Input)
             .doOnIoObserveOnMain()
             .subscribeBy { output ->
-                isLoadingExercises = false
                 when (output) {
-                    is Success -> {
-                        currentPage += 1
-                        isLastPage = output.isLastPage
-                        exercises.onNext(output.exercises)
+                    is SuccessCategories -> {
+                        filterOptions.onNext(output.categories)
                     }
-                    else -> error.onNext(NetworkErrorOnLoadingItems)
                 }
-                listLoading.onNext(false)
-                viewLoading.onNext(false)
             }
             .addTo(compositeDisposable)
     }
 
-    fun checkForMoreItems(
-        visibleItemCount: Int,
-        filteredItemCount: Int,
-        totalItemCount: Int,
-        firstVisibleItemPosition: Int,
-        isScrollDirectionDown: Boolean
-    ) {
-        if (!isLoadingExercises && !isLastPage) {
-            if (
-                areMoreItemsAvailable(
-                    visibleItemCount,
-                    filteredItemCount,
-                    totalItemCount,
-                    firstVisibleItemPosition,
-                    isScrollDirectionDown
-                )
-            ) {
-                listLoading.onNext(true)
-                isLoadingExercises = true
-                loadMoreItems()
+    fun setQueryFilter(queryFilter: CharSequence?) {
+        pagedExerciseProvider.setQueryFilter(queryFilter.toString())
+            .doOnIoObserveOnMain()
+            .subscribeBy {
+                exercisesDataSource = null
+                initialized.onNext(true)
             }
-        }
+            .addTo(compositeDisposable)
     }
 
-    private fun areMoreItemsAvailable(
-        visibleItemCount: Int,
-        filteredItemCount: Int,
-        totalItemCount: Int,
-        firstVisibleItemPosition: Int,
-        isScrollDirectionDown: Boolean
-    ): Boolean {
-        return if (filteredItemCount == totalItemCount) {
-            //check for full list of exercises
-            isScrollDirectionDown && visibleItemCount + firstVisibleItemPosition >= totalItemCount
-                && firstVisibleItemPosition >= 0
-        } else {
-            //check for filtered list of exercises
-            filteredItemCount <= PAGE_SIZE || isScrollDirectionDown && visibleItemCount + firstVisibleItemPosition >= filteredItemCount
-                && firstVisibleItemPosition >= 0
-        }
+    fun setCategoryFilter(id: Int?) {
+        pagedExerciseProvider.setCategoryFilter(id)
+            .doOnIoObserveOnMain()
+            .subscribeBy {
+                exercisesDataSource = null
+                initialized.onNext(true)
+            }
+            .addTo(compositeDisposable)
     }
 
-    companion object {
-        private const val PAGE_SIZE = 5
-    }
 }

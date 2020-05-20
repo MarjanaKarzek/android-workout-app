@@ -1,13 +1,13 @@
 package com.karzek.exercises.di
 
+import com.karzek.exercises.data.exercise.ExerciseLocalDataSource
 import com.karzek.exercises.data.exercise.ExerciseRemoteDataSource
-import com.karzek.exercises.data.exercise.ExerciseRepository
+import com.karzek.exercises.data.exercise.PagedExerciseProvider
+import com.karzek.exercises.data.exercise.contract.IExerciseLocalDataSource
 import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
-import com.karzek.exercises.domain.exercise.GetExercisesUseCase
-import com.karzek.exercises.domain.exercise.GetImagesForExerciseUseCase
-import com.karzek.exercises.domain.exercise.IGetExercisesUseCase
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase
-import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
+import com.karzek.exercises.domain.exercise.repository.IPagedExerciseProvider
+import com.karzek.exercises.domain.validation.IValidateCacheUseCase
+import com.karzek.exercises.domain.validation.ValidateCacheUseCase
 import dagger.Binds
 import dagger.Module
 
@@ -16,21 +16,23 @@ import dagger.Module
         StorageModule::class,
         ExercisesApiModule::class,
         MuscleModule::class,
-        CategoryModule::class
+        CategoryModule::class,
+        EquipmentModule::class,
+        ExerciseImageModule::class
     ]
 )
 interface ExercisesModule {
 
     @Binds
-    fun bindGetExercisesUseCase(getExercisesUseCase: GetExercisesUseCase): IGetExercisesUseCase
+    fun bindValidateCacheUseCase(validateCacheUseCase: ValidateCacheUseCase): IValidateCacheUseCase
 
     @Binds
-    fun bindGetImagesForExerciseUseCase(getImagesForExerciseUseCase: GetImagesForExerciseUseCase): IGetImagesForExerciseUseCase
-
-    @Binds
-    fun bindExerciseRepository(exerciseRepository: ExerciseRepository): IExerciseRepository
+    fun bindPagedExerciseProvider(exerciseRepository: PagedExerciseProvider): IPagedExerciseProvider
 
     @Binds
     fun bindExerciseRemoteDataSource(exerciseRemoteDataSource: ExerciseRemoteDataSource): IExerciseRemoteDataSource
+
+    @Binds
+    fun bindExerciseLocalDataSource(exerciseLocalDataSource: ExerciseLocalDataSource): IExerciseLocalDataSource
 
 }

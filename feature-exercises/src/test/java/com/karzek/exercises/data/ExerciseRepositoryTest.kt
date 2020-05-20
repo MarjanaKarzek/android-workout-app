@@ -1,10 +1,10 @@
 package com.karzek.exercises.data
 
 import com.karzek.exercises.base.BaseUnitTest
-import com.karzek.exercises.data.exercise.ExerciseRepository
+import com.karzek.exercises.data.exercise.PagedExerciseProvider
 import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
 import com.karzek.exercises.domain.exercise.model.Exercise
-import com.karzek.exercises.domain.exercise.repository.IExerciseRepository
+import com.karzek.exercises.domain.exercise.repository.IPagedExerciseProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Single
@@ -24,19 +24,19 @@ internal class ExerciseRepositoryTest : BaseUnitTest() {
         )
     )
 
-    private lateinit var repository: IExerciseRepository
+    private lateinit var providerPaged: IPagedExerciseProvider
 
     @BeforeEach
     override fun setup() {
         super.setup()
-        repository = ExerciseRepository(dataSource)
+        providerPaged = PagedExerciseProvider(dataSource)
     }
 
     @Test
     fun `getExercises returns expected output`() {
         every { dataSource.getExercises(0, 1) } returns Single.just(Pair(exercises, false))
 
-        repository.getExercises(0, 1).test()
+        providerPaged.getExercises(0, 1).test()
             .assertValue(Pair(exercises, false))
     }
 
@@ -44,7 +44,7 @@ internal class ExerciseRepositoryTest : BaseUnitTest() {
     fun `exceptions get passed to observer`() {
         every { dataSource.getExercises(0, 1) } returns Single.error(RuntimeException())
 
-        repository.getExercises(0, 1).test()
+        providerPaged.getExercises(0, 1).test()
             .assertError(RuntimeException::class.java)
     }
 

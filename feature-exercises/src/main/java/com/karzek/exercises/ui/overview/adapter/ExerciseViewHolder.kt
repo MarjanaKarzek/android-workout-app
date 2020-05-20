@@ -1,12 +1,10 @@
-package com.karzek.exercises.ui.overview.adapter.viewholder
+package com.karzek.exercises.ui.overview.adapter
 
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.karzek.core.ui.images.GlideApp
-import com.karzek.exercises.R
 import com.karzek.exercises.domain.exercise.model.Exercise
-import com.karzek.exercises.ui.overview.adapter.ExerciseInteractionListener
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseCategory
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseEquipment
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseImage
@@ -33,7 +31,7 @@ class ExerciseViewHolder(
     fun bind(item: Exercise) = with(containerView) {
         originalItem = item
         exerciseName.text = originalItem.name
-        exerciseCategory.text = originalItem.category
+        exerciseCategory.text = originalItem.category.name
 
         loadThumbnail()
         setupEquipmentSection()
@@ -41,10 +39,11 @@ class ExerciseViewHolder(
     }
 
     private fun loadThumbnail() = with(containerView) {
-        GlideApp.with(this)
-            .load(originalItem.imageThumbnailUrl)
-            .placeholder(R.drawable.ic_exercise_placeholder)
-            .into(exerciseImage)
+        originalItem.imageThumbnailUrl?.run {
+            GlideApp.with(containerView)
+                .load(this)
+                .into(exerciseImage)
+        }
     }
 
     private fun setupEquipmentSection() = with(containerView) {

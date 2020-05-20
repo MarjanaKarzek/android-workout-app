@@ -1,8 +1,7 @@
 package com.karzek.exercises.domain.muscle.repository
 
-import com.karzek.exercises.domain.muscle.model.Muscle
-import io.reactivex.Single
+import io.reactivex.Completable
 
 interface IMuscleRepository {
-    fun getAllMuscles(): Single<List<Muscle>>
+    fun validateCache(): Completable
 }

@@ -1,68 +1,56 @@
 package com.karzek.exercises.data.exercise
 
 import com.karzek.exercises.data.exercise.contract.IExerciseRemoteDataSource
-import com.karzek.exercises.domain.exercise.model.Exercise
-import com.karzek.exercises.http.category.ICategoryApiService
-import com.karzek.exercises.http.category.model.CategoriesResponse
-import com.karzek.exercises.http.category.model.CategoryResponse
-import com.karzek.exercises.http.equipment.IEquipmentApiService
-import com.karzek.exercises.http.equipment.model.EquipmentResponse
-import com.karzek.exercises.http.equipment.model.EquipmentsResponse
+import com.karzek.exercises.data.exercise.model.ExerciseRaw
 import com.karzek.exercises.http.exercise.IExerciseApiService
 import com.karzek.exercises.http.exercise.IExerciseImagesApiService
-import com.karzek.exercises.http.exercise.model.ExerciseResponse
 import com.karzek.exercises.http.exercise.model.ExerciseThumbnailResponse.ThumbnailResponse
-import com.karzek.exercises.http.exercise.model.ExercisesResponse
-import com.karzek.exercises.http.muscle.IMuscleApiService
-import com.karzek.exercises.http.muscle.model.MuscleResponse
-import com.karzek.exercises.http.muscle.model.MusclesResponse
+import com.karzek.exercises.http.exercise.model.toModels
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.functions.Function4
 import javax.inject.Inject
 
 class ExerciseRemoteDataSource @Inject constructor(
     private val exerciseApiService: IExerciseApiService,
-    private val exerciseImagesApiService: IExerciseImagesApiService,
-    private val muscleApiService: IMuscleApiService,
-    private val equipmentApiService: IEquipmentApiService,
-    private val categoryApiService: ICategoryApiService
+    private val exerciseImagesApiService: IExerciseImagesApiService
 ) : IExerciseRemoteDataSource {
+    private var queryFilter: String? = null
+    private var categoryFilter: Int? = null
 
     override fun getExercises(
         currentPage: Int,
         pageSize: Int
-    ): Single<Pair<List<Exercise>, Boolean>> {
+    ): Single<Pair<List<ExerciseRaw>, Boolean>> {
         var isLastPage = false
-        return Single.zip(
-            exerciseApiService.getExercises(page = currentPage + 1, limit = pageSize),
-            muscleApiService.getMuscles(),
-            equipmentApiService.getEquipments(),
-            categoryApiService.getCategories(),
-            Function4<ExercisesResponse, MusclesResponse, EquipmentsResponse, CategoriesResponse, List<Exercise>> { exercisesResponse, musclesResponse, equipmentResponse, categoryResponse ->
-                isLastPage = exercisesResponse.nextPage == null
-                constructExerciseModel(
-                    exercisesResponse.exercises,
-                    musclesResponse.muscles,
-                    equipmentResponse.equipments,
-                    categoryResponse.categories
-                )
-            })
-            .flatMap { addThumbnailImages(it) }
+        return exerciseApiService.getExercises(page = currentPage + 1, limit = pageSize, query = queryFilter, category = categoryFilter)
+            .map { response ->
+                isLastPage = response.nextPage == null
+                response.exercises.toModels()
+            }
+            .flatMap {
+                addThumbnailImages(it)
+            }
             .map {
                 Pair(it, isLastPage)
             }
-
     }
 
-    override fun getImageUrls(exerciseId: Int): Single<List<String>> {
-        return exerciseImagesApiService.getExerciseImages(exerciseId)
-            .map { response ->
-                response.images.map { it.imageUrl }
-            }
+    override fun setQueryFilter(queryFilter: String?): Completable {
+        if (queryFilter.isNullOrBlank()) {
+            this.queryFilter = null
+        } else {
+            this.queryFilter = queryFilter
+        }
+        return Completable.complete()
     }
 
-    private fun addThumbnailImages(exercises: List<Exercise>): Single<List<Exercise>> {
+    override fun setCategoryFilter(id: Int?): Completable {
+        categoryFilter = id
+        return Completable.complete()
+    }
+
+    private fun addThumbnailImages(exercises: List<ExerciseRaw>): Single<List<ExerciseRaw>> {
         return Observable.fromIterable(exercises)
             .flatMapSingle { exercise ->
                 exerciseImagesApiService.getThumbnail(exercise.id)
@@ -75,49 +63,6 @@ class ExerciseRemoteDataSource @Inject constructor(
                     }
             }
             .toList()
-    }
-
-    private fun constructExerciseModel(
-        exercises: List<ExerciseResponse>,
-        muscles: List<MuscleResponse>,
-        equipments: List<EquipmentResponse>,
-        categories: List<CategoryResponse>
-    ): List<Exercise> {
-        return exercises.map {
-            Exercise(
-                it.id,
-                it.name,
-                getCategory(categories, it.categoryId),
-                it.description,
-                muscles = getMuscles(muscles, it.muscleIds),
-                equipment = getEquipments(equipments, it.equipmentIds)
-            )
-        }
-    }
-
-    private fun getCategory(
-        categories: List<CategoryResponse>,
-        categoryId: Int
-    ): String {
-        return categories.first { it.id == categoryId }.name
-    }
-
-    private fun getMuscles(
-        muscles: List<MuscleResponse>,
-        muscleIds: List<Int>
-    ): List<String> {
-        return muscleIds.map { currentId ->
-            muscles.first { it.id == currentId }.name
-        }
-    }
-
-    private fun getEquipments(
-        equipments: List<EquipmentResponse>,
-        equipmentIds: List<Int>
-    ): List<String> {
-        return equipmentIds.map { currentId ->
-            equipments.first { it.id == currentId }.name
-        }
     }
 
 }

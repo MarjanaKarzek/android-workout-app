@@ -8,7 +8,7 @@ import com.karzek.exercises.domain.category.model.Category
 @Entity(tableName = "category_table")
 data class CategoryEntity(
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "categoryId")
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String

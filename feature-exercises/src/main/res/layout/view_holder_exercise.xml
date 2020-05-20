@@ -21,13 +21,19 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_gradient_white_vertical"
+        app:layout_constraintBottom_toTopOf="@id/header"
+        />
+
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_gradient_white_vertical"
+        android:background="@color/bgWhite"
         android:orientation="vertical"
-        android:paddingTop="16dp"
         app:layout_constraintBottom_toBottomOf="@id/exerciseImage"
         >
 

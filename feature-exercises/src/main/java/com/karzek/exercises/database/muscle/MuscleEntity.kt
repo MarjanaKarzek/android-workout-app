@@ -8,7 +8,7 @@ import com.karzek.exercises.domain.muscle.model.Muscle
 @Entity(tableName = "muscle_table")
 data class MuscleEntity(
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "muscleId")
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String

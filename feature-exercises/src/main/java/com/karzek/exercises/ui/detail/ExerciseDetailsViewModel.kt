@@ -3,10 +3,10 @@ package com.karzek.exercises.ui.detail
 import com.karzek.core.ui.BaseViewModel
 import com.karzek.core.ui.error.UIError.NetworkConnection
 import com.karzek.core.util.doOnIoObserveOnMain
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Input
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.Success
-import com.karzek.exercises.domain.exercise.IGetImagesForExerciseUseCase.Output.SuccessNoData
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase.Input
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase.Output.Success
+import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase.Output.SuccessNoData
 import com.karzek.exercises.domain.exercise.model.Exercise
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy

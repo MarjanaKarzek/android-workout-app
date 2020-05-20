@@ -18,7 +18,7 @@ class CategoryLocalDataSource @Inject constructor(
 ) : ICategoryLocalDataSource {
 
     override fun getAllCategories(): Maybe<List<Category>> {
-        return Single.just(isCacheValid())
+        return isCacheValid()
             .flatMapMaybe {
                 if(it) {
                     categoryDao.getAll()
@@ -43,10 +43,17 @@ class CategoryLocalDataSource @Inject constructor(
         }
     }
 
-    private fun isCacheValid(): Boolean {
-        val currentTime = Date().time
-        val timestamp = sharedPreferences.getLong(CATEGORY_CACHE_TIME_STAMP, 0)
-        return (timestamp + ONE_DAY) > currentTime
+    override fun isCacheValid(): Single<Boolean> {
+        return categoryDao.countItems()
+            .map {
+                if (it > 0) {
+                    val currentTime = Date().time
+                    val timestamp = sharedPreferences.getLong(CATEGORY_CACHE_TIME_STAMP, 0)
+                    (timestamp + ONE_DAY) > currentTime
+                } else {
+                    false
+                }
+            }
     }
 
     companion object {

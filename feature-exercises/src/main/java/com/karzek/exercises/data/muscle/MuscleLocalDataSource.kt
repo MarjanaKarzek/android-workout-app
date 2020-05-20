@@ -18,9 +18,9 @@ class MuscleLocalDataSource @Inject constructor(
 ) : IMuscleLocalDataSource {
 
     override fun getAllMuscles(): Maybe<List<Muscle>> {
-        return Single.just(isCacheValid())
+        return isCacheValid()
             .flatMapMaybe {
-                if(it) {
+                if (it) {
                     muscleDao.getAll()
                         .map { entities ->
                             entities.toModels()
@@ -43,10 +43,17 @@ class MuscleLocalDataSource @Inject constructor(
         }
     }
 
-    private fun isCacheValid(): Boolean {
-        val currentTime = Date().time
-        val timestamp = sharedPreferences.getLong(MUSCLE_CACHE_TIME_STAMP, 0)
-        return (timestamp + ONE_DAY) > currentTime
+    override fun isCacheValid(): Single<Boolean> {
+        return muscleDao.countItems()
+            .map {
+                if (it > 0) {
+                    val currentTime = Date().time
+                    val timestamp = sharedPreferences.getLong(MUSCLE_CACHE_TIME_STAMP, 0)
+                    (timestamp + ONE_DAY) > currentTime
+                } else {
+                    false
+                }
+            }
     }
 
     companion object {
