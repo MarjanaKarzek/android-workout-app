@@ -13,9 +13,8 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/_50sdp"
         app:menu="@menu/menu_exercises"
         app:title="@string/toolbar_title_exercises"
         />
@@ -36,7 +35,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:clipToPadding="false"
-      android:paddingBottom="54dp"
+      android:paddingBottom="@dimen/_54sdp"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       tools:visibility="gone"
       />
@@ -44,6 +43,9 @@
   <include
       android:id="@+id/errorView"
       layout="@layout/component_error_view_with_action"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="@dimen/_50sdp"
       android:visibility="gone"
       tools:visibility="visible"
       />
@@ -53,7 +55,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
-      android:layout_margin="16dp"
+      android:layout_margin="@dimen/_16sdp"
       >
 
     <ProgressBar

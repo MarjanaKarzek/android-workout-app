@@ -162,7 +162,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                         } else {
                             Snackbar.make(view!!, R.string.error_network_on_loading_exercises, Snackbar.LENGTH_INDEFINITE)
                                 .apply {
-                                    setAction("Refresh") { viewModel.refreshUI() }
+                                    setAction(R.string.generic_refresh) { viewModel.refreshUI() }
                                     show()
                                 }
                         }

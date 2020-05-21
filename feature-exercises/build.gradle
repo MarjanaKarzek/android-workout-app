@@ -9,6 +9,8 @@ dependencies {
   implementation Libs.AndroidX.constraintLayout
   implementation Libs.Google.material
   implementation Libs.Animator.recyclerViewAnimators
+  implementation Libs.Intuit.ssp
+  implementation Libs.Intuit.sdp
 
   implementation Libs.AndroidArch.paging
   implementation Libs.AndroidArch.rxJava2

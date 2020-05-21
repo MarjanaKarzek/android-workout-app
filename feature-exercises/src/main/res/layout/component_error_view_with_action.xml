@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    tools:context=".ui.detail.ExerciseDetailsActivity"
     >
 
   <androidx.appcompat.widget.AppCompatImageView
       android:layout_width="match_parent"
-      android:layout_height="200dp"
-      android:layout_marginStart="50dp"
-      android:layout_marginEnd="50dp"
+      android:layout_height="@dimen/_200sdp"
+      android:layout_marginStart="@dimen/_50sdp"
+      android:layout_marginEnd="@dimen/_50sdp"
       android:src="@drawable/ic_error"
       />
 
@@ -19,9 +21,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginEnd="16dp"
+      android:layout_marginStart="@dimen/_16sdp"
+      android:layout_marginTop="@dimen/_24sdp"
+      android:layout_marginEnd="@dimen/_16sdp"
       android:gravity="center_horizontal"
       android:text="@string/error_view_title"
       />
@@ -30,22 +32,22 @@
       style="@style/TextStyle.Body"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginEnd="16dp"
+      android:layout_marginStart="@dimen/_16sdp"
+      android:layout_marginTop="@dimen/_8sdp"
+      android:layout_marginEnd="@dimen/_16sdp"
       android:gravity="center_horizontal"
       android:text="@string/error_view_message"
       />
 
   <com.google.android.material.button.MaterialButton
       android:id="@+id/errorViewAction"
+      style="@style/TextButton"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="16dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginEnd="16dp"
+      android:layout_marginStart="@dimen/_16sdp"
+      android:layout_marginTop="@dimen/_24sdp"
+      android:layout_marginEnd="@dimen/_16sdp"
       android:text="@string/try_again"
-      style="@style/Widget.MaterialComponents.Button.TextButton"
       />
 
 

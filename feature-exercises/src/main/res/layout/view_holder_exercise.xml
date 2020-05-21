@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/_8sdp"
     >
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,15 +15,15 @@
     <ImageView
         android:id="@+id/exerciseImage"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:padding="8dp"
+        android:layout_height="@dimen/_250sdp"
+        android:padding="@dimen/_8sdp"
         android:src="@drawable/ic_exercise_placeholder"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="@dimen/_20sdp"
         android:background="@drawable/bg_gradient_white_vertical"
         app:layout_constraintBottom_toTopOf="@id/header"
         />
@@ -42,8 +42,8 @@
           style="@style/TextStyle.Title"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="8dp"
-          android:layout_marginEnd="8dp"
+          android:layout_marginStart="@dimen/_8sdp"
+          android:layout_marginEnd="@dimen/_8sdp"
           tools:text="Exercise Name"
           />
 
@@ -52,11 +52,20 @@
           style="@style/TextStyle.Subtitle"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="8dp"
-          android:layout_marginTop="4dp"
-          android:layout_marginEnd="8dp"
-          android:layout_marginBottom="8dp"
+          android:layout_marginStart="@dimen/_8sdp"
+          android:layout_marginTop="@dimen/_4sdp"
+          android:layout_marginEnd="@dimen/_8sdp"
+          android:layout_marginBottom="@dimen/_8sdp"
           tools:text="Exercise Category"
+          />
+
+      <View
+          android:id="@+id/divider"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:background="@color/colorPrimary"
           />
 
     </LinearLayout>
@@ -66,15 +75,15 @@
         style="@style/TextStyle.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:drawableStart="@drawable/ic_equipment"
-        android:drawablePadding="16dp"
+        android:drawablePadding="@dimen/_8sdp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/exerciseMuscles"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_goneMarginBottom="8dp"
+        app:layout_goneMarginBottom="@dimen/_8sdp"
         tools:text="Barbell, Incline bench"
         tools:visibility="visible"
         />
@@ -84,13 +93,13 @@
         style="@style/TextStyle.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/_8sdp"
         android:drawableStart="@drawable/ic_muscle"
-        android:drawablePadding="16dp"
+        android:drawablePadding="@dimen/_8sdp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/exerciseEquipment"
-        app:layout_goneMarginTop="16dp"
+        app:layout_goneMarginTop="@dimen/_12sdp"
         tools:text="Anterior deltoid"
         tools:visibility="visible"
         />

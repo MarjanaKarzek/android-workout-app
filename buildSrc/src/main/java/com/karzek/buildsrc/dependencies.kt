@@ -71,6 +71,12 @@ object Libs {
         const val gson = "com.google.code.gson:gson:$version"
     }
 
+    object Intuit {
+        private const val version = "1.0.6"
+        const val ssp = "com.intuit.ssp:ssp-android:$version"
+        const val sdp = "com.intuit.sdp:sdp-android:$version"
+    }
+
     object LeakCanary {
         private const val version = "2.2"
         const val leakCanary = "com.squareup.leakcanary:leakcanary-android:$version"
