@@ -2,7 +2,6 @@ package com.karzek.exercises.database.exercise
 
 import androidx.paging.DataSource
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -24,7 +23,11 @@ interface ExerciseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise_table ORDER BY name ASC")
-    fun allExercises(): DataSource.Factory<Int, ExerciseEntityFull>
+    fun getAllPaged(): DataSource.Factory<Int, ExerciseEntityFull>
+
+    @Transaction
+    @Query("SELECT * FROM exercise_table ORDER BY name ASC")
+    fun getAll(): Single<List<ExerciseEntityFull>>
 
     @Query("DELETE FROM exercise_table")
     fun deleteAll(): Completable

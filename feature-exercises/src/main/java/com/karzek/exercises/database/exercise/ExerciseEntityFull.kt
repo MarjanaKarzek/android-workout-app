@@ -44,7 +44,7 @@ data class ExerciseEntityFull(
     val equipments: List<EquipmentEntity>
 ) {
     val category: CategoryEntity
-        get() = _category.first()
+        get() = _category.firstOrNull() ?: CategoryEntity(-1, "Unknown")
 
     fun toModel() = Exercise(
         exercise.id,

@@ -12,7 +12,7 @@ data class ExerciseEntity(
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "description")
-    val description: String?,
+    val description: String? = null,
     @ColumnInfo(name = "imageThumbnailUrl")
     val imageThumbnailUrl: String? = null
 )

@@ -115,32 +115,43 @@ object Libs {
 
     object Room {
         private const val version = "2.2.5"
-        const val room = "androidx.room:room-runtime:${version}"
-        const val compiler = "androidx.room:room-compiler:${version}"
-        const val rxJava2 = "androidx.room:room-rxjava2:${version}"
+        const val room = "androidx.room:room-runtime:$version"
+        const val compiler = "androidx.room:room-compiler:$version"
+        const val rxJava2 = "androidx.room:room-rxjava2:$version"
     }
 
     object Timber {
         private const val version = "4.7.1"
-        const val timber = "com.jakewharton.timber:timber:${version}"
+        const val timber = "com.jakewharton.timber:timber:$version"
     }
 
     object Animator {
         private const val version = "3.0.0"
-        const val recyclerViewAnimators = "jp.wasabeef:recyclerview-animators:${version}"
+        const val recyclerViewAnimators = "jp.wasabeef:recyclerview-animators:$version"
     }
 
     object Test {
         object Mockk {
             private const val version = "1.9.3"
-            const val mockk = "io.mockk:mockk:${version}"
-            const val mockkAndroid = "io.mockk:mockk-android:${version}"
+            const val mockk = "io.mockk:mockk:$version"
+            const val mockkAndroid = "io.mockk:mockk-android:$version"
         }
 
         object JUnit {
             private const val version = "5.6.1"
-            const val jupiterApi = "org.junit.jupiter:junit-jupiter-api:${version}"
-            const val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${version}"
+            const val jupiterApi = "org.junit.jupiter:junit-jupiter-api:$version"
+            const val jupiterEngine = "org.junit.jupiter:junit-jupiter-engine:$version"
+        }
+
+        object Espresso {
+            private const val version = "3.2.0"
+            const val espresso = "androidx.test.espresso:espresso-core:$version"
+        }
+
+        object AndroidX {
+            const val runner = "androidx.test:runner:1.2.0"
+            const val test = "androidx.test:core:1.2.0"
+            const val testExt = "androidx.test.ext:junit:1.1.1"
         }
     }
 }

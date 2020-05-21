@@ -37,4 +37,9 @@ dependencies {
 
   testImplementation Libs.Test.JUnit.jupiterApi
   testImplementation Libs.Test.Mockk.mockk
+
+  androidTestImplementation Libs.Test.AndroidX.runner
+  androidTestImplementation Libs.Test.AndroidX.test
+  androidTestImplementation Libs.Test.AndroidX.testExt
+  androidTestImplementation Libs.Test.Espresso.espresso
 }

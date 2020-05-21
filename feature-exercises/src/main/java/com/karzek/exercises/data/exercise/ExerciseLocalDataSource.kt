@@ -41,7 +41,7 @@ class ExerciseLocalDataSource @Inject constructor(
 
     override fun getExercises(): Observable<PagedList<Exercise>> {
         return Single.fromCallable {
-            exerciseDao.allExercises().map { it.toModel() }
+            exerciseDao.getAllPaged().map { it.toModel() }
         }
             .flatMapObservable { dataSourceFactory ->
                 RxPagedListBuilder(dataSourceFactory, pageListConfig)
