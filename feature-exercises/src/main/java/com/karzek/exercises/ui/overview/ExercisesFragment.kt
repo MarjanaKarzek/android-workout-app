@@ -1,6 +1,7 @@
 package com.karzek.exercises.ui.overview
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -34,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_exercises.exerciseFilterOptions
 import kotlinx.android.synthetic.main.fragment_exercises.loadingView
 import kotlinx.android.synthetic.main.fragment_exercises.recyclerView
 import kotlinx.android.synthetic.main.fragment_exercises.toolbar
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInteractionListener {
@@ -42,6 +44,10 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     private lateinit var adapter: ExercisesAdapter
     private lateinit var layoutManager: LinearLayoutManager
 
+    private lateinit var searchView: SearchView
+
+    private val filterChips = mutableListOf<Chip>()
+
     override fun getTagForStack() = ExercisesFragment::class.java.toString()
 
     override fun onCreateOptionsMenu(
@@ -49,14 +55,14 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         inflater: MenuInflater
     ) {
         requireActivity().menuInflater.inflate(R.menu.menu_exercises, menu)
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.queryHint = getString(R.string.exercise_search_hint)
         searchView.queryTextChanges()
             .skipInitialValue()
-            //debounce doesn't really work
-            .debounce(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .debounce(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
+                Timber.d("sending query $it")
                 viewModel.setQueryFilter(it)
             }
     }
@@ -111,12 +117,15 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
                 if (it.isNotEmpty()) {
+                    filterChips.clear()
+                    exerciseFilterOptions.removeAllViews()
                     it.forEach { category ->
                         val chip = Chip(exerciseFilterOptions.context)
                         chip.tag = category
                         chip.text = category.name
                         chip.isClickable = true
                         chip.isCheckable = true
+                        filterChips.add(chip)
                         exerciseFilterOptions.addView(chip)
                     }
                 }
@@ -133,8 +142,16 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe { state ->
                 when (state) {
-                    is Loading -> setLoading(true)
-                    is Success -> setLoading(false)
+                    is Loading -> {
+                        setFilterOptionsEnabled(false)
+                        setSearchViewEnabled(false)
+                        setLoading(true)
+                    }
+                    is Success -> {
+                        setFilterOptionsEnabled(true)
+                        setSearchViewEnabled(true)
+                        setLoading(false)
+                    }
                     is Error -> {
                         setLoading(false)
                         if (adapter.itemCount == 0) {
@@ -145,6 +162,23 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                     }
                 }
             }
+    }
+
+    private fun setFilterOptionsEnabled(isEnabled: Boolean) {
+        filterChips.forEach {
+            it.isEnabled = isEnabled
+        }
+    }
+
+    private fun setSearchViewEnabled(isEnabled: Boolean) {
+        searchView.isEnabled = isEnabled
+        if (!isEnabled) {
+            searchView.clearFocus()
+            searchView.inputType = InputType.TYPE_NULL
+        } else {
+            searchView.requestFocus()
+            searchView.inputType = InputType.TYPE_CLASS_TEXT
+        }
     }
 
     private fun initExerciseList() {

@@ -24,8 +24,6 @@ class ExerciseLocalDataSource @Inject constructor(
     private val exerciseRelationsDao: ExerciseRelationsDao
 ) : IExerciseLocalDataSource {
 
-    override var lastPageReached: Boolean = false
-
     private val boundaryCallback = ExerciseBoundaryCallback()
     private val pageListConfig = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
@@ -60,7 +58,6 @@ class ExerciseLocalDataSource @Inject constructor(
     }
 
     override fun clearCache(): Completable {
-        lastPageReached = false
         return exerciseDao.deleteAll()
             .andThen(exerciseRelationsDao.deleteAllEquipmentRelations())
             .andThen(exerciseRelationsDao.deleteAllMuscleRelations())

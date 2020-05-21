@@ -14,7 +14,6 @@ import com.karzek.exercises.domain.exercise.model.LoadingState.Success
 import com.karzek.exercises.domain.exercise.repository.IPagedExerciseProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -28,12 +27,15 @@ class PagedExerciseProvider @Inject constructor(
     private val exerciseLocalDataSource: IExerciseLocalDataSource
 ) : IPagedExerciseProvider {
 
+    private var isLastPageReached = false
+    private var currentPage = 0
+
     private val disposable = CompositeDisposable()
 
     override val exerciseLoadingState = BehaviorSubject.create<LoadingState>()
 
     override fun appendExercises(): BehaviorSubject<LoadingState> {
-        if (!exerciseLocalDataSource.lastPageReached && (exerciseLoadingState.value == null || exerciseLoadingState.value != Loading)) {
+        if (!isLastPageReached && (exerciseLoadingState.value == null || exerciseLoadingState.value != Loading)) {
             exerciseLoadingState.onNext(Loading)
             fetchExercises()
                 .doOnIoObserveOnMain()
@@ -52,19 +54,12 @@ class PagedExerciseProvider @Inject constructor(
     }
 
     private fun fetchExercises(): Completable {
-        return getCurrentPage()
-            .flatMap { currentPage ->
-                exerciseRemoteDataSource.getExercises(currentPage, PAGE_SIZE)
-            }
+        return exerciseRemoteDataSource.getExercises(currentPage, PAGE_SIZE)
             .flatMapCompletable {
-                exerciseLocalDataSource.lastPageReached = it.second
+                isLastPageReached = it.second
+                currentPage += 1
                 exerciseLocalDataSource.addExercises(it.first)
             }
-    }
-
-    private fun getCurrentPage(): Single<Int> {
-        return exerciseLocalDataSource.getItemCount()
-            .map { it / PAGE_SIZE }
     }
 
     override fun getExercises(): Observable<PagedList<Exercise>> {
@@ -86,6 +81,8 @@ class PagedExerciseProvider @Inject constructor(
     }
 
     override fun clearCache(): Completable {
+        isLastPageReached = false
+        currentPage = 0
         return exerciseLocalDataSource.clearCache()
     }
 }

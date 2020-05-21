@@ -15,5 +15,4 @@ interface IExerciseLocalDataSource {
     fun getBoundaryState(): PublishSubject<BoundaryState>
     fun getItemCount(): Single<Int>
     fun clearCache(): Completable
-    var lastPageReached: Boolean
 }
