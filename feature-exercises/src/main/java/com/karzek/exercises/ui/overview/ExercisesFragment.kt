@@ -153,6 +153,8 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                         setLoading(false)
                     }
                     is Error -> {
+                        setFilterOptionsEnabled(true)
+                        setSearchViewEnabled(true)
                         setLoading(false)
                         if (adapter.itemCount == 0) {
                             errorView.visibility = View.VISIBLE
