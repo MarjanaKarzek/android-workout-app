@@ -71,4 +71,5 @@ dependencies {
   debugImplementation Libs.LeakCanary.leakCanary
   androidTestImplementation Libs.Test.RESTMock.mockServer
   androidTestImplementation Libs.Test.AndroidX.runner
+  androidTestImplementation Libs.Dexopener.dexopener
 }

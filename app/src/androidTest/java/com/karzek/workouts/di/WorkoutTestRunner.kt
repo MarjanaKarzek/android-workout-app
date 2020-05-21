@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
 import androidx.test.runner.AndroidJUnitRunner
+import com.github.tmurakami.dexopener.DexOpener
 import io.appflate.restmock.RESTMockServerStarter
 import io.appflate.restmock.android.AndroidAssetsFileParser
 import io.appflate.restmock.android.AndroidLogger
@@ -28,6 +29,7 @@ class WorkoutTestRunner : AndroidJUnitRunner() {
         className: String,
         context: Context
     ): Application {
-        return super.newApplication(cl, TestWorkoutApplication::class.java.name, context)
+        DexOpener.install(this)
+        return super.newApplication(cl, "com.karzek.workouts.di.TestWorkoutApplication", context)
     }
 }

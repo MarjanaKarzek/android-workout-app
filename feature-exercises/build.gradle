@@ -46,4 +46,5 @@ dependencies {
   androidTestImplementation Libs.Test.RESTMock.mockServer
   androidTestImplementation Libs.SquareUp.okio
   androidTestImplementation Libs.SquareUp.okhttp3mock
+  androidTestImplementation Libs.Dexopener.dexopener
 }

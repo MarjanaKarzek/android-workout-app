@@ -13,6 +13,7 @@ android {
   defaultConfig {
     minSdkVersion Config.minSdk
     targetSdkVersion Config.targetSdk
+    testInstrumentationRunner 'com.karzek.workouts.di.WorkoutTestRunner'
   }
 
   compileOptions {
