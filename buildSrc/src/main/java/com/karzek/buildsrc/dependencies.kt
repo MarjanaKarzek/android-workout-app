@@ -82,9 +82,11 @@ object Libs {
         const val leakCanary = "com.squareup.leakcanary:leakcanary-android:$version"
     }
 
-    object OkHttp {
-        private const val version = "4.3.1"
+    object SquareUp {
+        private const val version = "4.7.2"
         const val okHttp = "com.squareup.okhttp3:okhttp:$version"
+        const val okio = "com.squareup.okio:okio:2.6.0"
+        const val okhttp3mock = "com.squareup.okhttp3:mockwebserver:$version"
     }
 
     object ReactiveX {
@@ -152,6 +154,11 @@ object Libs {
             const val runner = "androidx.test:runner:1.2.0"
             const val test = "androidx.test:core:1.2.0"
             const val testExt = "androidx.test.ext:junit:1.1.1"
+        }
+
+        object RESTMock {
+            private const val version = "0.4.3"
+            const val mockServer = "com.github.andrzejchm.RESTMock:android:$version"
         }
     }
 }

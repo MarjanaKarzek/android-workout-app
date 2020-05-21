@@ -3,6 +3,7 @@ package com.karzek.exercises.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.karzek.core.di.NetworkingModule
+import com.karzek.core.http.Endpoints
 import com.karzek.exercises.http.category.ICategoryApiService
 import com.karzek.exercises.http.equipment.IEquipmentApiService
 import com.karzek.exercises.http.exercise.IExerciseApiService
@@ -34,7 +35,8 @@ class ExercisesApiModule {
     fun providesExerciseRetrofit(
         okHttpClientBuilder: OkHttpClient.Builder,
         retrofitBuilder: Retrofit.Builder,
-        gson: Gson
+        gson: Gson,
+        endpoints: Endpoints
     ): Retrofit {
         okHttpClientBuilder.addInterceptor { chain ->
             val request = chain.request().newBuilder().addHeader("Accept", "application/json").build()
@@ -42,7 +44,7 @@ class ExercisesApiModule {
         }
 
         return retrofitBuilder
-            .baseUrl(BASE_URL)
+            .baseUrl(endpoints.workoutsBaseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClientBuilder.build())
             .build()
@@ -86,10 +88,6 @@ class ExercisesApiModule {
         retrofit: Retrofit
     ): IMuscleApiService {
         return retrofit.create(IMuscleApiService::class.java)
-    }
-
-    companion object {
-        private const val BASE_URL = "https://wger.de/api/v2/"
     }
 
 }

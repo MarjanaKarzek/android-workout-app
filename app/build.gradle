@@ -66,7 +66,7 @@ dependencies {
 
   implementation Libs.Retrofit.retrofit
   implementation Libs.Retrofit.retrofitGson
-  implementation Libs.OkHttp.okHttp
+  implementation Libs.SquareUp.okHttp
 
   debugImplementation Libs.LeakCanary.leakCanary
 }

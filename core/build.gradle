@@ -12,10 +12,14 @@ dependencies {
   implementation Libs.Retrofit.retrofit
   implementation Libs.Retrofit.retrofitGson
   implementation Libs.Retrofit.retrofitRxAdapter
-  implementation Libs.OkHttp.okHttp
+  implementation Libs.SquareUp.okHttp
   debugImplementation Libs.Chucker.debug
   releaseImplementation Libs.Chucker.release
 
   implementation Libs.Glide.glide
   kapt Libs.Glide.compiler
+
+  androidTestImplementation Libs.Test.RESTMock.mockServer
+  androidTestImplementation Libs.SquareUp.okio
+  androidTestImplementation Libs.SquareUp.okhttp3mock
 }
