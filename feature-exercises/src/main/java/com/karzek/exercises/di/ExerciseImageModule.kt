@@ -1,7 +1,7 @@
 package com.karzek.exercises.di
 
 import com.karzek.exercises.data.exerciseImages.ExerciseImageRepository
-import com.karzek.exercises.data.exerciseImages.contract.ExerciseImageRemoteDataSource
+import com.karzek.exercises.data.exerciseImages.ExerciseImageRemoteDataSource
 import com.karzek.exercises.data.exerciseImages.contract.IExerciseImageRemoteDataSource
 import com.karzek.exercises.domain.exerciseimage.GetImagesForExerciseUseCase
 import com.karzek.exercises.domain.exerciseimage.IGetImagesForExerciseUseCase

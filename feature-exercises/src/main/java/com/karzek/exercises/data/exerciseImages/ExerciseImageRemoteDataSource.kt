@@ -1,5 +1,6 @@
-package com.karzek.exercises.data.exerciseImages.contract
+package com.karzek.exercises.data.exerciseImages
 
+import com.karzek.exercises.data.exerciseImages.contract.IExerciseImageRemoteDataSource
 import com.karzek.exercises.http.exercise.IExerciseImagesApiService
 import io.reactivex.Single
 import javax.inject.Inject

@@ -38,22 +38,32 @@ internal class MuscleLocalDataSourceTest : BaseUnitTest() {
     }
 
     @Test
-    fun `getAllMuscles returns expected output when cache is valid`() {
+    fun `isCacheValid returns true when cache is valid`() {
+        every { muscleDao.countItems() } returns Single.just(1)
+
         val currentTime = Date().time
         every { sharedPreferences.getLong("MUSCLE_CACHE_TIME_STAMP", any()) } returns currentTime
-        every { muscleDao.getAll() } returns Single.just(muscleEntities)
 
-        dataSource.getAllMuscles().test()
-            .assertValue(muscles)
+        dataSource.isCacheValid().test()
+            .assertValue(true)
     }
 
     @Test
-    fun `getAllMuscles returns Maybe empty output when cache is invalid`() {
-        val currentTime = Date().time + 24 * 60 * 60 * 1000
-        every { sharedPreferences.getLong("MUSCLE_CACHE_TIME_STAMP", any()) } returns currentTime
+    fun `isCacheValid returns false when cache is invalid due to expired time stamp`() {
+        every { muscleDao.countItems() } returns Single.just(1)
 
-        dataSource.getAllMuscles().test()
-            .assertEmpty()
+        every { sharedPreferences.getLong("MUSCLE_CACHE_TIME_STAMP", any()) } returns 0
+
+        dataSource.isCacheValid().test()
+            .assertValue(false)
+    }
+
+    @Test
+    fun `isCacheValid returns false when cache is invalid due to empty table`() {
+        every { muscleDao.countItems() } returns Single.just(0)
+
+        dataSource.isCacheValid().test()
+            .assertValue(false)
     }
 
     @Test
@@ -72,7 +82,7 @@ internal class MuscleLocalDataSourceTest : BaseUnitTest() {
         every { sharedPreferences.getLong("MUSCLE_CACHE_TIME_STAMP", any()) } returns currentTime
         every { muscleDao.getAll() } returns Single.error(RuntimeException())
 
-        dataSource.getAllMuscles().test()
+        dataSource.isCacheValid().test()
             .assertError(RuntimeException::class.java)
     }
 }

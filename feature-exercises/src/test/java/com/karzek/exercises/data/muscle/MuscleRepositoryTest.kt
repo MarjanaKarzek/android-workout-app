@@ -9,7 +9,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -33,41 +32,45 @@ internal class MuscleRepositoryTest : BaseUnitTest() {
     }
 
     @Test
-    fun `getAllMuscles returns expected output from cache if cache is valid`() {
-        every { localDataSource.getAllMuscles() } returns Maybe.just(muscles)
+    fun `validateCache completes without error when local data is valid`() {
+        every { localDataSource.isCacheValid() } returns Single.just(true)
 
-        repository.getAllMuscles().test()
-            .assertValue(muscles)
+        repository.validateCache().test().assertComplete()
 
+        verify(exactly = 1) { localDataSource.isCacheValid() }
+        verify(exactly = 0) { remoteDataSource.getAllMuscles() }
         verify(exactly = 0) { localDataSource.setAllMuscles(any()) }
     }
 
     @Test
-    fun `getAllMuscles returns expected output from remote if cache is invalid`() {
-        every { localDataSource.getAllMuscles() } returns Maybe.empty()
-        every { localDataSource.setAllMuscles(muscles) } returns Completable.complete()
+    fun `validateCache completes without error when local data is invalid and got updated from remote`() {
+        every { localDataSource.isCacheValid() } returns Single.just(false)
         every { remoteDataSource.getAllMuscles() } returns Single.just(muscles)
+        every { localDataSource.setAllMuscles(muscles) } returns Completable.complete()
 
-        repository.getAllMuscles().test()
-            .assertValue(muscles)
+        repository.validateCache().test().assertComplete()
 
+        verify(exactly = 1) { localDataSource.isCacheValid() }
+        verify(exactly = 1) { remoteDataSource.getAllMuscles() }
         verify(exactly = 1) { localDataSource.setAllMuscles(muscles) }
     }
 
     @Test
     fun `exceptions from local get passed to observer`() {
-        every { localDataSource.getAllMuscles() } returns Maybe.error(RuntimeException())
+        every { localDataSource.isCacheValid() } returns Single.just(false)
+        every { remoteDataSource.getAllMuscles() } returns Single.just(muscles)
+        every { localDataSource.setAllMuscles(muscles) } returns Completable.error(RuntimeException())
 
-        repository.getAllMuscles().test()
+        repository.validateCache().test()
             .assertError(RuntimeException::class.java)
     }
 
     @Test
     fun `exceptions from remote get passed to observer`() {
-        every { localDataSource.getAllMuscles() } returns Maybe.empty()
+        every { localDataSource.isCacheValid() } returns Single.just(false)
         every { remoteDataSource.getAllMuscles() } returns Single.error(RuntimeException())
 
-        repository.getAllMuscles().test()
+        repository.validateCache().test()
             .assertError(RuntimeException::class.java)
     }
 

@@ -17,7 +17,7 @@ interface EquipmentDao {
     fun getAll(): Single<List<EquipmentEntity>>
 
     @Query("DELETE FROM equipment_table")
-    fun deleteAll(): Completable
+    fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(equipments: List<EquipmentEntity>)

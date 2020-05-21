@@ -6,7 +6,6 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface IMuscleLocalDataSource {
-    fun getAllMuscles(): Maybe<List<Muscle>>
     fun setAllMuscles(muscles: List<Muscle>): Completable
     fun isCacheValid(): Single<Boolean>
 }

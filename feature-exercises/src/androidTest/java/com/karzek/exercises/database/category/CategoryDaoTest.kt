@@ -52,7 +52,7 @@ internal class CategoryDaoTest {
     @Throws(Exception::class)
     fun successfulDeletion() {
         dao.insertAll(entities)
-        dao.deleteAll().test()
+        dao.deleteAll()
         dao.getAll().test().assertValue(emptyList())
     }
 

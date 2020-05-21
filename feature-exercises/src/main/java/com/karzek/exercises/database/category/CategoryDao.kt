@@ -17,7 +17,7 @@ interface CategoryDao {
     fun getAll(): Single<List<CategoryEntity>>
 
     @Query("DELETE FROM category_table")
-    fun deleteAll(): Completable
+    fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(categories: List<CategoryEntity>)

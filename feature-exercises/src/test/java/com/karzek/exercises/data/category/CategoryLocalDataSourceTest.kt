@@ -38,7 +38,38 @@ internal class CategoryLocalDataSourceTest : BaseUnitTest() {
     }
 
     @Test
+    fun `isCacheValid returns true when cache is valid`() {
+        every { categoryDao.countItems() } returns Single.just(1)
+
+        val currentTime = Date().time
+        every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns currentTime
+
+        dataSource.isCacheValid().test()
+            .assertValue(true)
+    }
+
+    @Test
+    fun `isCacheValid returns false when cache is invalid due to expired time stamp`() {
+        every { categoryDao.countItems() } returns Single.just(1)
+
+        every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns 0
+
+        dataSource.isCacheValid().test()
+            .assertValue(false)
+    }
+
+    @Test
+    fun `isCacheValid returns false when cache is invalid due to empty table`() {
+        every { categoryDao.countItems() } returns Single.just(0)
+
+        dataSource.isCacheValid().test()
+            .assertValue(false)
+    }
+
+    @Test
     fun `getAllCategories returns expected output when cache is valid`() {
+        every { categoryDao.countItems() } returns Single.just(5)
+
         val currentTime = Date().time
         every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns currentTime
         every { categoryDao.getAll() } returns Single.just(categoriesEntities)
@@ -48,12 +79,20 @@ internal class CategoryLocalDataSourceTest : BaseUnitTest() {
     }
 
     @Test
-    fun `getAllCategories returns Maybe empty output when cache is invalid`() {
-        val currentTime = Date().time + 24 * 60 * 60 * 1000
-        every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns currentTime
+    fun `getAllCategories returns Maybe empty output when cache is invalid due to expired time stamp`() {
+        every { categoryDao.countItems() } returns Single.just(5)
+        every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns 0
 
         dataSource.getAllCategories().test()
-            .assertEmpty()
+            .assertComplete()
+    }
+
+    @Test
+    fun `getAllCategories returns Maybe empty output when cache is invalid due to empty table`() {
+        every { categoryDao.countItems() } returns Single.just(0)
+
+        dataSource.getAllCategories().test()
+            .assertComplete()
     }
 
     @Test
@@ -70,7 +109,7 @@ internal class CategoryLocalDataSourceTest : BaseUnitTest() {
     fun `exceptions from dao get passed to observer`() {
         val currentTime = Date().time
         every { sharedPreferences.getLong("CATEGORY_CACHE_TIME_STAMP", any()) } returns currentTime
-        every { categoryDao.getAll() } returns Single.error(RuntimeException())
+        every { categoryDao.countItems() } returns Single.error(RuntimeException())
 
         dataSource.getAllCategories().test()
             .assertError(RuntimeException::class.java)

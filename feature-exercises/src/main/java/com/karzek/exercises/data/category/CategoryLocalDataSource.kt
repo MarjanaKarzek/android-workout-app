@@ -33,12 +33,8 @@ class CategoryLocalDataSource @Inject constructor(
     }
 
     override fun setAllCategories(categories: List<Category>): Completable {
-        return categoryDao.deleteAll()
-            .andThen(performInsertion(categories))
-    }
-
-    private fun performInsertion(categories: List<Category>): Completable {
         return Completable.fromCallable {
+            categoryDao.deleteAll()
             val entities = categories.map {
                 CategoryEntity(it.id, it.name)
             }

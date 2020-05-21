@@ -17,7 +17,7 @@ interface MuscleDao {
     fun getAll(): Single<List<MuscleEntity>>
 
     @Query("DELETE FROM muscle_table")
-    fun deleteAll(): Completable
+    fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(muscles: List<MuscleEntity>)

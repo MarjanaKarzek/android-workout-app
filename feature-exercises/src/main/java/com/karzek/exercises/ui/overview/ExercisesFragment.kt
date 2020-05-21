@@ -81,9 +81,11 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     }
 
     private fun setupRecyclerView() {
+        adapter = ExercisesAdapter(this)
         layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = SlideInUpAnimator()
+        recyclerView.adapter = adapter
     }
 
     private fun setupToolbar() {
@@ -92,6 +94,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         toolbar.itemClicks()
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
+
                 if (it.itemId == R.id.filter) {
                     if (exerciseFilterOptions.visibility == View.GONE) {
                         exerciseFilterOptions.visibility = View.VISIBLE

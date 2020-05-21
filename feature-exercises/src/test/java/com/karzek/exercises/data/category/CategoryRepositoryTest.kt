@@ -55,6 +55,30 @@ internal class CategoryRepositoryTest : BaseUnitTest() {
     }
 
     @Test
+    fun `validateCache completes without error when local data is valid`() {
+        every { localDataSource.isCacheValid() } returns Single.just(true)
+
+        repository.validateCache().test().assertComplete()
+
+        verify(exactly = 1) { localDataSource.isCacheValid() }
+        verify(exactly = 0) { remoteDataSource.getAllCategories() }
+        verify(exactly = 0) { localDataSource.setAllCategories(any()) }
+    }
+
+    @Test
+    fun `validateCache completes without error when local data is invalid and got updated from remote`() {
+        every { localDataSource.isCacheValid() } returns Single.just(false)
+        every { remoteDataSource.getAllCategories() } returns Single.just(categories)
+        every { localDataSource.setAllCategories(categories) } returns Completable.complete()
+
+        repository.validateCache().test().assertComplete()
+
+        verify(exactly = 1) { localDataSource.isCacheValid() }
+        verify(exactly = 1) { remoteDataSource.getAllCategories() }
+        verify(exactly = 1) { localDataSource.setAllCategories(categories) }
+    }
+
+    @Test
     fun `exceptions from local get passed to observer`() {
         every { localDataSource.getAllCategories() } returns Maybe.error(RuntimeException())
 
