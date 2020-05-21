@@ -57,7 +57,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.queryHint = getString(R.string.exercise_search_hint)
         searchView.queryTextChanges()
-            .skipInitialValue()
+            .skip(2)
             .debounce(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
