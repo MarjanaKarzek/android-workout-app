@@ -30,7 +30,7 @@ import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
-import kotlinx.android.synthetic.main.component_error_view_with_action.errorViewAction
+import kotlinx.android.synthetic.main.exercises_error_view_with_action.errorViewAction
 import kotlinx.android.synthetic.main.fragment_exercises.errorView
 import kotlinx.android.synthetic.main.fragment_exercises.exerciseFilterOptions
 import kotlinx.android.synthetic.main.fragment_exercises.loadingView

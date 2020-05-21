@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="try_again">Try again</string>
+  <string name="error_view_title">Unknown error</string>
+  <string name="error_view_message">Unfortunately an error occurred. \nTry checking your internet connection.</string>
+</resources>
