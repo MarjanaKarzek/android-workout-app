@@ -1,9 +1,9 @@
 package com.karzek.exercises.domain.validation
 
-import com.karzek.exercises.data.category.CategoryRepository
-import com.karzek.exercises.data.equipment.EquipmentRepository
-import com.karzek.exercises.data.muscle.MuscleRepository
+import com.karzek.exercises.domain.category.repository.ICategoryRepository
+import com.karzek.exercises.domain.equipment.repository.IEquipmentRepository
 import com.karzek.exercises.domain.exercise.repository.IPagedExerciseProvider
+import com.karzek.exercises.domain.muscle.repository.IMuscleRepository
 import com.karzek.exercises.domain.validation.IValidateCacheUseCase.Input
 import com.karzek.exercises.domain.validation.IValidateCacheUseCase.Output
 import com.karzek.exercises.domain.validation.IValidateCacheUseCase.Output.ErrorUnknown
@@ -13,9 +13,9 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class ValidateCacheUseCase @Inject constructor(
-    private val categoryRepository: CategoryRepository,
-    private val muscleRepository: MuscleRepository,
-    private val equipmentRepository: EquipmentRepository,
+    private val categoryRepository: ICategoryRepository,
+    private val muscleRepository: IMuscleRepository,
+    private val equipmentRepository: IEquipmentRepository,
     private val exerciseProvider: IPagedExerciseProvider
 ) : IValidateCacheUseCase {
 
@@ -25,9 +25,10 @@ class ValidateCacheUseCase @Inject constructor(
             muscleRepository.validateCache(),
             equipmentRepository.validateCache(),
             exerciseProvider.clearCache()
-        ).toSingle {
-            Success as Output
-        }
+        )
+            .toSingle {
+                Success as Output
+            }
             .onErrorReturn {
                 ErrorUnknown
             }
