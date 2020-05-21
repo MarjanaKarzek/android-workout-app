@@ -1,0 +1,7 @@
+import com.karzek.buildsrc.Libs
+
+apply from: "$rootDir/gradle/android-library.gradle"
+
+dependencies {
+  implementation Libs.Google.material
+}

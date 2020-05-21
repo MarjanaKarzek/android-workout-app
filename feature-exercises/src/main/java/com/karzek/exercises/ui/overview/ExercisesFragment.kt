@@ -47,8 +47,6 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
 
     private lateinit var searchView: SearchView
 
-    private val filterChips = mutableListOf<Chip>()
-
     override fun getTagForStack() = ExercisesFragment::class.java.toString()
 
     override fun onCreateOptionsMenu(
@@ -94,7 +92,6 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         toolbar.itemClicks()
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
-
                 if (it.itemId == R.id.filter) {
                     if (exerciseFilterOptions.visibility == View.GONE) {
                         exerciseFilterOptions.visibility = View.VISIBLE
@@ -119,19 +116,9 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
 
         viewModel.filterOptions
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
-            .subscribe {
-                if (it.isNotEmpty()) {
-                    filterChips.clear()
-                    exerciseFilterOptions.removeAllViews()
-                    it.forEach { category ->
-                        val chip = Chip(exerciseFilterOptions.context)
-                        chip.tag = category
-                        chip.text = category.name
-                        chip.isClickable = true
-                        chip.isCheckable = true
-                        filterChips.add(chip)
-                        exerciseFilterOptions.addView(chip)
-                    }
+            .subscribe { categories ->
+                if (categories.isNotEmpty()) {
+                    exerciseFilterOptions.setChipTags(categories.map { Pair(it.name, it) })
                 }
             }
 
@@ -147,17 +134,17 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .subscribe { state ->
                 when (state) {
                     is Loading -> {
-                        setFilterOptionsEnabled(false)
+                        exerciseFilterOptions.disableChips()
                         setSearchViewEnabled(false)
                         setLoading(true)
                     }
                     is Success -> {
-                        setFilterOptionsEnabled(true)
+                        exerciseFilterOptions.enableChips()
                         setSearchViewEnabled(true)
                         setLoading(false)
                     }
                     is Error -> {
-                        setFilterOptionsEnabled(true)
+                        exerciseFilterOptions.enableChips()
                         setSearchViewEnabled(true)
                         setLoading(false)
                         if (adapter.itemCount == 0) {
@@ -172,12 +159,6 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                     }
                 }
             }
-    }
-
-    private fun setFilterOptionsEnabled(isEnabled: Boolean) {
-        filterChips.forEach {
-            it.isEnabled = isEnabled
-        }
     }
 
     private fun setSearchViewEnabled(isEnabled: Boolean) {

@@ -19,7 +19,7 @@
         app:title="@string/toolbar_title_exercises"
         />
 
-    <com.google.android.material.chip.ChipGroup
+    <com.karzek.uicomponents.chipgroup.ChipGroup
         android:id="@+id/exerciseFilterOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
