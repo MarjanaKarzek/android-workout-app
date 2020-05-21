@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.appcompat.queryTextChanges
 import com.jakewharton.rxbinding3.view.clicks
@@ -159,7 +160,11 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                         if (adapter.itemCount == 0) {
                             errorView.visibility = View.VISIBLE
                         } else {
-                            Toast.makeText(requireContext(), R.string.error_network_on_loading_exercises, Toast.LENGTH_LONG).show()
+                            Snackbar.make(view!!, R.string.error_network_on_loading_exercises, Snackbar.LENGTH_INDEFINITE)
+                                .apply {
+                                    setAction("Refresh") { viewModel.refreshUI() }
+                                    show()
+                                }
                         }
                     }
                 }

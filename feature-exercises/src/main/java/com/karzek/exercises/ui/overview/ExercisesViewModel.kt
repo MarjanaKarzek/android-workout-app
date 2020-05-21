@@ -83,7 +83,7 @@ class ExercisesViewModel @Inject constructor(
         pagedExerciseProvider.setQueryFilter(queryFilter.toString())
             .doOnIoObserveOnMain()
             .subscribeBy {
-                resetView()
+                refreshUI()
             }
             .addTo(compositeDisposable)
     }
@@ -92,12 +92,12 @@ class ExercisesViewModel @Inject constructor(
         pagedExerciseProvider.setCategoryFilter(id)
             .doOnIoObserveOnMain()
             .subscribeBy {
-                resetView()
+                refreshUI()
             }
             .addTo(compositeDisposable)
     }
 
-    private fun resetView() {
+    fun refreshUI() {
         exercisesDataSource = null
         initialized.onNext(true)
     }
