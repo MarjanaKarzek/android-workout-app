@@ -19,7 +19,7 @@ android {
     versionCode 1
     versionName "1.0"
 
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner 'com.karzek.workouts.di.WorkoutTestRunner'
   }
 
   buildTypes {
@@ -69,4 +69,6 @@ dependencies {
   implementation Libs.SquareUp.okHttp
 
   debugImplementation Libs.LeakCanary.leakCanary
+  androidTestImplementation Libs.Test.RESTMock.mockServer
+  androidTestImplementation Libs.Test.AndroidX.runner
 }

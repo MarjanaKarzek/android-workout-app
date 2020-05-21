@@ -25,5 +25,5 @@ import javax.inject.Singleton
 interface TestAppComponent : AppComponent {
 
     @Component.Factory
-    abstract class Factory : AndroidInjector.Factory<WorkoutApplication>
+    abstract class Factory : AndroidInjector.Factory<TestWorkoutApplication>
 }

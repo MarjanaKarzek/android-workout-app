@@ -13,7 +13,6 @@ android {
   defaultConfig {
     minSdkVersion Config.minSdk
     targetSdkVersion Config.targetSdk
-    testInstrumentationRunner 'io.appflate.restmock.android.RESTMockTestRunner'
   }
 
   compileOptions {

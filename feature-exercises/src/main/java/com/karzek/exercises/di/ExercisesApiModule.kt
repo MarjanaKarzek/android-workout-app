@@ -43,6 +43,13 @@ class ExercisesApiModule {
             chain.proceed(request)
         }
 
+        if(endpoints.customSocketFactory != null && endpoints.customTrustManager != null) {
+            okHttpClientBuilder.sslSocketFactory(
+                endpoints.customSocketFactory!!,
+                endpoints.customTrustManager!!
+            )
+        }
+
         return retrofitBuilder
             .baseUrl(endpoints.workoutsBaseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))

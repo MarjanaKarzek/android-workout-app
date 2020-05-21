@@ -10,6 +10,6 @@ object HTTPTestConfigModule {
 
     @Provides
     fun provideEndpoints(): Endpoints {
-        return Endpoints(RESTMockServer.getUrl())
+        return Endpoints(RESTMockServer.getUrl(), RESTMockServer.getSSLSocketFactory(), RESTMockServer.getTrustManager())
     }
 }

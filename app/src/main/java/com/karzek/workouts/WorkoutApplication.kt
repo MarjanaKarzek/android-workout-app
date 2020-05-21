@@ -8,7 +8,7 @@ import dagger.android.DaggerApplication
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class WorkoutApplication : DaggerApplication() {
+open class WorkoutApplication : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
         Dagger.factory(AppComponent.Factory::class.java).create(this)
