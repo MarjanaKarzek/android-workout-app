@@ -11,30 +11,47 @@ Since this application is not published on the Play Store it can only be run by 
 ## Teck Stack
 ### Patterns
 Clean Architecture
+
 MVVM
+
 Repository Pattern
 
 ### Technologies
 Kotlin
 
+
 Dagger Android
+
 RxJava2 with RxKotlin, RxBinding, AutoDispose
+
 AndroidX
 
+
 Gson
+
 OkHttp
+
 Retrofit
+
 
 Room
 
+
 Material Components
+
 Intuit
+
 Glide
+
 RecyclerView Animator
 
+
 JUnit5
+
 Mockk
+
 Espresso with JUnit4
+
 
 Timber
 
@@ -44,4 +61,5 @@ LeakCanary
 
 ## Remarks
 There is a memory leak in the debug version of the app due to Chucker: 
+
 [More information](https://github.com/ChuckerTeam/chucker/issues/102)
