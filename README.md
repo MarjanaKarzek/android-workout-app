@@ -8,6 +8,9 @@ Since this application is not published on the Play Store it can only be run by 
 4. Run the project on a device or emulator
 5. Enjoy the app <3
 
+### API
+The app is using the [WGER Workout Manager](https://wger.de/de/software/api) api. There is no api key needed to access it.
+
 ## Teck Stack
 ### Patterns
 Clean Architecture
