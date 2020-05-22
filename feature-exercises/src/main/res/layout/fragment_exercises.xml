@@ -19,7 +19,7 @@
         app:title="@string/toolbar_title_exercises"
         />
 
-    <com.google.android.material.chip.ChipGroup
+    <com.karzek.uicomponents.chipgroup.ChipGroup
         android:id="@+id/exerciseFilterOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
 
   <include
       android:id="@+id/errorView"
-      layout="@layout/component_error_view_with_action"
+      layout="@layout/exercises_error_view_with_action"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="@dimen/_50sdp"

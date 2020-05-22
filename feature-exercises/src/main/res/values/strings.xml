@@ -5,9 +5,6 @@
   <string name="filter">Filter</string>
   <string name="exercise_search_hint">Exercise Name</string>
   <string name="error_on_loading_images">An error occurred while loading exercise images</string>
-  <string name="try_again">Try again</string>
-  <string name="error_view_title">Unknown error</string>
-  <string name="error_view_message">Unfortunately an error occurred. \nTry checking your internet connection.</string>
   <string name="error_network_on_loading_exercises">A network error occurred while loading exercises</string>
   <string name="error_unknown">"A unknown error occurred"</string>
   <string name="generic_refresh">Refresh</string>

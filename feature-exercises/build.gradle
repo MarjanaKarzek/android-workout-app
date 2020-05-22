@@ -4,6 +4,7 @@ apply from: "$rootDir/gradle/android-library.gradle"
 
 dependencies {
   implementation project(':core')
+  implementation project(':lib-ui-components')
 
   implementation Libs.AndroidX.recyclerView
   implementation Libs.AndroidX.constraintLayout

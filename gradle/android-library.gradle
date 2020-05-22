@@ -34,5 +34,6 @@ android {
 }
 
 dependencies {
+  implementation Libs.Kotlin.stdlib
   implementation Libs.Timber.timber
 }

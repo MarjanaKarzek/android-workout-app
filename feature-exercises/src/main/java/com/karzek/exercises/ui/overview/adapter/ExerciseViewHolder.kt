@@ -4,6 +4,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.karzek.core.ui.images.GlideApp
+import com.karzek.exercises.R
 import com.karzek.exercises.domain.exercise.model.Exercise
 import kotlinx.android.synthetic.main.view_holder_exercise.view.divider
 import kotlinx.android.synthetic.main.view_holder_exercise.view.exerciseCategory
@@ -41,10 +42,12 @@ class ExerciseViewHolder(
     }
 
     private fun loadThumbnail() = with(containerView) {
-        originalItem.imageThumbnailUrl?.run {
+        if(originalItem.imageThumbnailUrl != null){
             GlideApp.with(containerView)
-                .load(this)
+                .load(originalItem.imageThumbnailUrl)
                 .into(exerciseImage)
+        } else {
+            exerciseImage.setImageResource(R.drawable.ic_exercise_placeholder)
         }
     }
 
