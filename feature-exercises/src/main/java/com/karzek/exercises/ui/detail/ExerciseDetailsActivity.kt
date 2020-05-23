@@ -6,13 +6,12 @@ import android.os.Bundle
 import android.text.Html
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.karzek.core.ui.BaseActivity
 import com.karzek.exercises.R
-import com.karzek.exercises.R.string
 import com.karzek.exercises.domain.exercise.model.Exercise
 import com.karzek.exercises.ui.detail.adapter.ExerciseImagesAdapter
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -22,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_exercise_details.exerciseEquipmen
 import kotlinx.android.synthetic.main.activity_exercise_details.exerciseImagesList
 import kotlinx.android.synthetic.main.activity_exercise_details.exerciseMuscles
 import kotlinx.android.synthetic.main.activity_exercise_details.loadingView
+import kotlinx.android.synthetic.main.activity_exercise_details.root
 import kotlinx.android.synthetic.main.activity_exercise_details.toolbar
 
 class ExerciseDetailsActivity : BaseActivity() {
@@ -68,7 +68,10 @@ class ExerciseDetailsActivity : BaseActivity() {
         viewModel.error
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
-                Toast.makeText(this, getString(string.error_on_loading_images), Toast.LENGTH_LONG).show()
+                Snackbar.make(root, R.string.error_on_loading_images, Snackbar.LENGTH_INDEFINITE).apply {
+                        setAction(R.string.generic_refresh) { viewModel.loadImages() }
+                        show()
+                    }
             }
 
         viewModel.exerciseDetails

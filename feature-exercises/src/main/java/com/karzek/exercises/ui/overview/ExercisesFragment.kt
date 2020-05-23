@@ -21,6 +21,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActions
 import com.karzek.core.ui.BaseFragment
 import com.karzek.core.ui.binding.checkedChanges
+import com.karzek.core.util.showSoftKeyboard
 import com.karzek.exercises.R
 import com.karzek.exercises.domain.category.model.Category
 import com.karzek.exercises.domain.exercise.model.Exercise
@@ -82,6 +83,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
                 .subscribe {
                     searchEditText?.setText("")
                     searchEditText?.requestFocus()
+                    activity?.showSoftKeyboard()
                 }
         }
         val searchMenuItem = menu.findItem(R.id.search);
