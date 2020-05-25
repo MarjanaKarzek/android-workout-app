@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.actionViewEvents
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActions
@@ -40,7 +39,9 @@ import kotlinx.android.synthetic.main.fragment_exercises.exerciseFilterOptions
 import kotlinx.android.synthetic.main.fragment_exercises.loadingView
 import kotlinx.android.synthetic.main.fragment_exercises.recyclerView
 import kotlinx.android.synthetic.main.fragment_exercises.toolbar
+import kotlinx.android.synthetic.main.menu_item_filter.filterBadge
 import timber.log.Timber
+import kotlin.Int.Companion
 
 class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInteractionListener {
 
@@ -58,9 +59,11 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     ) {
         requireActivity().menuInflater.inflate(R.menu.menu_exercises, menu)
         searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.maxWidth = Int.MAX_VALUE
         searchView.queryHint = getString(R.string.exercise_search_hint)
         searchView.imeOptions = EditorInfo.IME_ACTION_SEARCH
         setSearchViewListeners(menu)
+        setFilterListener(menu)
     }
 
     private fun setSearchViewListeners(menu: Menu) {
@@ -98,6 +101,18 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             }
     }
 
+    private fun setFilterListener(menu: Menu) {
+            menu.findItem(R.id.filter).actionView.clicks()
+            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe {
+                if (exerciseFilterOptions.visibility == View.GONE) {
+                    exerciseFilterOptions.visibility = View.VISIBLE
+                } else {
+                    exerciseFilterOptions.visibility = View.GONE
+                }
+            }
+    }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -121,17 +136,6 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     private fun setupToolbar() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
-        toolbar.itemClicks()
-            .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
-            .subscribe {
-                if (it.itemId == R.id.filter) {
-                    if (exerciseFilterOptions.visibility == View.GONE) {
-                        exerciseFilterOptions.visibility = View.VISIBLE
-                    } else {
-                        exerciseFilterOptions.visibility = View.GONE
-                    }
-                }
-            }
     }
 
     private fun subscribeToViewModel() {
@@ -239,6 +243,11 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
             .subscribe {
                 val selectedCategory = exerciseFilterOptions.findViewById<Chip?>(it)?.tag as Category?
                 viewModel.setCategoryFilter(selectedCategory?.id)
+                if (selectedCategory == null) {
+                    filterBadge.visibility = View.GONE
+                } else {
+                    filterBadge.visibility = View.VISIBLE
+                }
             }
     }
 

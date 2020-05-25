@@ -23,6 +23,8 @@
         android:id="@+id/exerciseFilterOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_4sdp"
+        android:paddingEnd="@dimen/_4sdp"
         android:background="@color/bgWhite"
         android:visibility="gone"
         app:singleSelection="true"

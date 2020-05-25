@@ -6,24 +6,33 @@
     <item name="colorAccent">@color/colorAccent</item>
     <item name="android:windowBackground">@color/background</item>
     <item name="searchViewStyle">@style/SearchView</item>
-    <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextView</item>
+    <item name="autoCompleteTextViewStyle">@style/SearchAutoCompleteTextView</item>
     <item name="toolbarStyle">@style/Toolbar</item>
     <item name="toolbarNavigationButtonStyle">@style/ToolbarNavigation</item>
     <item name="android:homeAsUpIndicator">@drawable/ic_back_white</item>
     <item name="chipGroupStyle">@style/ChipGroupStyle</item>
     <item name="chipStyle">@style/ChipStyle</item>
+    <item name="actionOverflowButtonStyle">@style/ActionButtonStyle</item>
   </style>
 
   <!-- TOOLBAR -->
 
-  <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+  <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+    <item name="maxButtonHeight">@dimen/_48sdp</item>
+    <item name="android:paddingStart">@dimen/_4sdp</item>
+    <item name="android:paddingEnd">@dimen/_4sdp</item>
+    <item name="android:paddingBottom">@dimen/_4sdp</item>
+    <item name="android:paddingTop">@dimen/_4sdp</item>
+    <item name="contentInsetStart">@dimen/_16sdp</item>
     <item name="titleTextAppearance">@style/Toolbar.TitleText</item>
     <item name="subtitleTextAppearance">@style/Toolbar.SubtitleText</item>
-    <item name="android:contentInsetStartWithNavigation">@dimen/_4sdp</item>
+    <item name="android:contentInsetStartWithNavigation">@dimen/_72sdp</item>
+    <item name="actionModeStyle">@style/Custom.Widget.ActionMode</item>
+    <item name="actionModeCloseButtonStyle">@style/Custom.Widget.ActionButton.CloseMode</item>
   </style>
 
   <style name="ToolbarNavigation" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
-    <item name="android:padding">@dimen/_12sdp</item>
+    <item name="android:paddingTop">@dimen/navigation_icon_padding_top</item>
     <item name="android:scaleType">centerInside</item>
   </style>
 
@@ -37,18 +46,36 @@
     <item name="android:textColor">@color/textPrimaryLight</item>
   </style>
 
+  <style name="ActionButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+    <item name="android:paddingStart">0dp</item>
+    <item name="android:paddingEnd">0dp</item>
+    <item name="android:paddingTop">0dp</item>
+    <item name="android:paddingBottom">0dp</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:layout_marginTop">@dimen/_40sdp</item>
+  </style>
+
+  <style name="Custom.Widget.ActionMode" parent="Widget.AppCompat.ActionMode">
+    <item name="android:paddingStart">@dimen/_4sdp</item>
+    <item name="android:paddingEnd">@dimen/_4sdp</item>
+  </style>
+
+  <style name="Custom.Widget.ActionButton.CloseMode" parent="Widget.AppCompat.ActionButton.CloseMode">
+    <item name="android:layout_marginRight">@dimen/_20sdp</item>
+  </style>
+
   <style name="SearchView" parent="Widget.AppCompat.Light.SearchView">
     <item name="closeIcon">@drawable/ic_close_white</item>
     <item name="searchIcon">@drawable/ic_search_white</item>
   </style>
 
-  <style name="AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
+  <style name="SearchAutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
     <item name="android:textColor">@color/textPrimaryLight</item>
     <item name="android:editTextColor">@color/textPrimaryLight</item>
     <item name="android:textCursorDrawable">@drawable/cursor</item>
     <item name="android:textColorHint">@color/textSecondaryLight</item>
     <item name="android:colorControlActivated">@color/textPrimaryLight</item>
-    <item name="android:textSize">@dimen/_15ssp</item>
+    <item name="android:textSize">@dimen/search_view_text_size</item>
   </style>
 
   <!-- BUTTON -->
