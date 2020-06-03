@@ -14,7 +14,8 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_52sdp"
+        android:minHeight="@dimen/_46sdp"
         app:menu="@menu/menu_exercises"
         app:title="@string/toolbar_title_exercises"
         />
@@ -23,9 +24,9 @@
         android:id="@+id/exerciseFilterOptions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/_4sdp"
-        android:paddingEnd="@dimen/_4sdp"
         android:background="@color/bgWhite"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
         android:visibility="gone"
         app:singleSelection="true"
         />
@@ -66,6 +67,5 @@
         />
 
   </FrameLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

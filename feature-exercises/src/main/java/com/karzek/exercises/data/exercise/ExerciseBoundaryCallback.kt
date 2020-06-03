@@ -5,7 +5,6 @@ import com.karzek.exercises.domain.exercise.model.BoundaryState
 import com.karzek.exercises.domain.exercise.model.BoundaryState.BoundaryStateEndItem
 import com.karzek.exercises.domain.exercise.model.BoundaryState.BoundaryStateZeroItems
 import com.karzek.exercises.domain.exercise.model.Exercise
-import com.karzek.exercises.domain.exercise.model.LoadingState
 import io.reactivex.subjects.PublishSubject
 
 class ExerciseBoundaryCallback : PagedList.BoundaryCallback<Exercise>() {

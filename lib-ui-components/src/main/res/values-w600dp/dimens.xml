@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="navigation_icon_padding_top">@dimen/_20sdp</dimen>
   <dimen name="search_view_text_size">@dimen/_12ssp</dimen>
-  <dimen name="action_item_padding_top">@dimen/_20sdp</dimen>
 </resources>

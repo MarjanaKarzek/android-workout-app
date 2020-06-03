@@ -41,7 +41,6 @@ import kotlinx.android.synthetic.main.fragment_exercises.recyclerView
 import kotlinx.android.synthetic.main.fragment_exercises.toolbar
 import kotlinx.android.synthetic.main.menu_item_filter.filterBadge
 import timber.log.Timber
-import kotlin.Int.Companion
 
 class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInteractionListener {
 
@@ -58,10 +57,12 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
         inflater: MenuInflater
     ) {
         requireActivity().menuInflater.inflate(R.menu.menu_exercises, menu)
+
         searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.maxWidth = Int.MAX_VALUE
         searchView.queryHint = getString(R.string.exercise_search_hint)
         searchView.imeOptions = EditorInfo.IME_ACTION_SEARCH
+
         setSearchViewListeners(menu)
         setFilterListener(menu)
     }
@@ -102,7 +103,7 @@ class ExercisesFragment : BaseFragment(R.layout.fragment_exercises), ExerciseInt
     }
 
     private fun setFilterListener(menu: Menu) {
-            menu.findItem(R.id.filter).actionView.clicks()
+        menu.findItem(R.id.filter).actionView.clicks()
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe {
                 if (exerciseFilterOptions.visibility == View.GONE) {

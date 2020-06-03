@@ -16,7 +16,8 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_height="@dimen/_72sdp"
+        android:minHeight="@dimen/_44sdp"
         app:navigationIcon="@drawable/ic_back_white"
         tools:subtitle="Shoulders"
         tools:title="Arnold Shoulder Press"
